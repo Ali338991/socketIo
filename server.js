@@ -4,8 +4,9 @@ var cors = require("cors");
 var bodyParser = require("body-parser")
 var dbConnection = require("./config/Db");
 // Routes List
-var ordersRoute = require("./components/orders/OrdersRoutes");
-var AuthRoutes = require("./components/auth/AuthRoutes");
+// var ordersRoute = require("./components/orders/OrdersRoutes");
+// var AuthRoutes = require("./components/auth/AuthRoutes");
+ var AdminRoutes = require("./components/superAdmin/admins/AdminRoutes");
 
 
 var app = express();
@@ -16,6 +17,7 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static('public'))
 
 dbConnection();
 
@@ -24,8 +26,10 @@ app.get("/", function (req, res) {
   res.send("Server is working");
 });
 
-app.use("/auth", AuthRoutes);
-app.use("/orders", ordersRoute);
+app.use("/Admin", AdminRoutes);
+
+// app.use("/auth", AuthRoutes);
+// app.use("/orders", ordersRoute);
 
 // ip:port/auth/login - post
 // ip:port/orders/createOrder - post
