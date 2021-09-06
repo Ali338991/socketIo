@@ -47,22 +47,59 @@ module.exports.addAdmin = async (req, res) => {
 
 
 module.exports.getAdminList = async (req, res) => {
-  
- 
+   
   const getAdminList = await AdminList.find({});
- 
-
   console.log("getAdminList", getAdminList);
   res.status(200).json(getAdminList);
-
-
 };
 
 
-module.exports.DeleteCourse = async (req, res) => {
-  const {docId} = req.body;   
-  await courseList.findByIdAndDelete({_id : docId});  
-  res.status(200).send("Course Delete Successfully");
+//temporaryBlok
 
+module.exports.temporaryBlok = async (req, res) => {
+  const {id } = req.body;
+  const Admin = await AdminList.findByIdAndUpdate(id, {
+    Status:"temporaryBlok",
+  }, { new: true } 
+    )
 
+  Admin.save((err, data) => {
+    console.log("log",data);
+    if (err) {
+      res.status(501).send("error happen");
+    } 
+    res.status(200).send("Admin Temporary Blok Successfully");
+  });
+};
+
+module.exports.permanentBlok = async (req, res) => {
+  const {id } = req.body;
+  console.log("id", id);
+
+  const Admin = await AdminList.findByIdAndUpdate(id, {
+    Status:"permanentBlok",
+  }, { new: true } 
+    )
+  Admin.save((err, data) => {
+    console.log("log",data);
+    if (err) {
+      res.status(501).send("error happen");
+    } 
+    res.status(200).send("Admin Permanent Blok Successfully");
+  });
+};
+
+module.exports.fullControl = async (req, res) => {
+  const {id } = req.body;
+  const Admin = await AdminList.findByIdAndUpdate(id, {
+    Status:"fullControl",
+  }, { new: true } 
+    )
+  Admin.save((err, data) => {
+    console.log("log",data);
+    if (err) {
+      res.status(501).send("error happen");
+    } 
+    res.status(200).send("Now Admin has full Control");
+  });
 };
