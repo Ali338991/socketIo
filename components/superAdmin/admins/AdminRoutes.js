@@ -1,7 +1,8 @@
 var express = require("express")
 var router = express.Router();
 
-let {addAdmin,uploadImage,getAdminList,temporaryBlok,permanentBlok,fullControl} = require('./AdminController')
+let {addAdmin,getAdminList,temporaryBlok,permanentBlok,fullControl} = require('./AdminController')
+let {uploadImage} = require('../../../config/Multer')
 
 router.post('/addAdmin',uploadImage, (req,res)=>{   
     addAdmin(req,res)
