@@ -1,31 +1,31 @@
 var mongoose = require("mongoose")
 var AdminSchema = mongoose.Schema({
  
-  Name:{
+  name:{
     type: String,
       required:true
   }, 
-  UserName:{
+  userName:{
     type: String,
       required:true
   }, 
-  Email:{
+  email:{
     type: String,
       required:true
   }, 
-  Image:{
+  image:{
     type: String,
       required:true
   },
-  Mobile:{
+  mobile:{
     type: Number,
       required:true
   },
-  Status:{
+  status:{
     type: String,
       required:true
   }, 
-  Role:{
+  role:{
     type: String,
       required:true
   },
