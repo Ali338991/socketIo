@@ -12,15 +12,15 @@ router.get('/getAdminList', (req,res)=>{
     getAdminList(req,res)
 })
 
-router.post('/temporaryBlok', (req,res)=>{   
+router.put('/temporaryBlok', (req,res)=>{   
     temporaryBlok(req,res)
 })
 
-router.post('/permanentBlok', (req,res)=>{   
+router.put('/permanentBlok', (req,res)=>{   
     permanentBlok(req,res)
 })
 
-router.post('/fullControl', (req,res)=>{   
+router.put('/fullControl', (req,res)=>{   
     fullControl(req,res)
 })
 
