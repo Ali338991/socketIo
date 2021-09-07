@@ -24,6 +24,9 @@ router.post('/fullControl', (req,res)=>{
     fullControl(req,res)
 })
 
+router.post('/updateAdmin', (req,res)=>{   
+    // fullControl(req,res)
+})
 
 
 
