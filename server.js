@@ -26,8 +26,8 @@ app.get("/", function (req, res) {
   res.send("Server is working");
 });
 
-app.use("/Admin", AdminRoutes);
-app.use("/teachers", teacherRoutes);
+app.use("/superAdmin/admins", AdminRoutes);
+app.use("/superAdmin/teachers", teacherRoutes);
 
 // app.use("/auth", AuthRoutes);
 // app.use("/orders", ordersRoute);
