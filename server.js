@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 // var AuthRoutes = require("./components/auth/AuthRoutes");
  var AdminRoutes = require("./components/superAdmin/admins/AdminRoutes");
  var teacherRoutes=require('./components/superAdmin/teachers/TeacherRoutes');
+ var StudentRoutes = require("./components/superAdmin/students/StudentRoutes");
+
 
 
 var app = express();
@@ -29,6 +31,8 @@ app.get("/", function (req, res) {
 
 app.use("/superAdmin/admins", AdminRoutes);
 app.use("/superAdmin/teachers", teacherRoutes);
+app.use("/superAdmin/students", StudentRoutes);
+
 
 // app.use("/auth", AuthRoutes);
 // app.use("/orders", ordersRoute);

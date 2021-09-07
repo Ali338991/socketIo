@@ -24,11 +24,11 @@ router.post('/fullControl', (req,res)=>{
     fullControl(req,res)
 })
 
-router.post('/updateAdmin',uploadImage, (req,res)=>{   
+router.put('/updateAdmin',uploadImage, (req,res)=>{   
     updateAdmin(req,res)
 })
 
-router.post('/deleteAdmin',uploadImage, (req,res)=>{   
+router.delete('/deleteAdmin',(req,res)=>{   
     deleteAdmin(req,res)
 })
 
