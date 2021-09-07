@@ -1,16 +1,9 @@
 var AdminList = require("./AdminModel");
-
-
-
-
-
-
 //Function to add Admin
-
 module.exports.addAdmin = async (req, res) => {
   console.log("addAdmin", req.body);
   const { name, userName, email, mobile, role, status } = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!name || !userName || !email || !mobile || !role || !status) {
     res.status(400).send("All params are required");
@@ -19,7 +12,6 @@ module.exports.addAdmin = async (req, res) => {
   const newAdminList = new AdminList({
     name, userName, email, mobile, role, status,
     image: filename,
-
   });
   console.log("newAdminList", newAdminList);
 
@@ -48,7 +40,6 @@ module.exports.getAdminList = async (req, res) => {
 
 
 //temporaryBlok
-
 module.exports.temporaryBlok = async (req, res) => {
   const { id } = req.body;
   if (!id) {
@@ -76,7 +67,6 @@ module.exports.permanentBlok = async (req, res) => {
   if (!id) {
     res.status(400).send("All params are required");
   }
-
   const Admin = await AdminList.findByIdAndUpdate(id, {
     Status: "permanentBlok",
   }, { new: true }
@@ -116,13 +106,11 @@ module.exports.fullControl = async (req, res) => {
 
 module.exports.updateAdmin = async (req, res) => {
   const { name, userName, email, mobile, role, status,id } = req.body;
-
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!id || !name || !userName || !email || !mobile || !role || !status) {
     res.status(400).send("All params are required");
   }
-
   const Admin = await AdminList.findByIdAndUpdate(id, {
     name, userName, email, mobile, role, status,
     image: filename,
@@ -148,10 +136,6 @@ module.exports.deleteAdmin = async (req, res) => {
   const Admin = await AdminList.findByIdAndDelete({_id:id});
   if (!Admin) {
     res.status(400).send("Your id is incorrect");
-  }
-
-  
+  }  
   res.status(200).send("Admin Delete Successfully");
-
-
 };

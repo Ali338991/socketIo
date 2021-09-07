@@ -1,5 +1,5 @@
 var mongoose = require("mongoose")
-var AdminSchema = mongoose.Schema({
+var StudentSchema = mongoose.Schema({
  
   name:{
     type: String,
@@ -24,6 +24,10 @@ var AdminSchema = mongoose.Schema({
     type: String,
       required:true
   }, 
+  course:{
+    type: String,
+      required:true
+  }, 
   role:{
     type: String,
       required:true
@@ -34,5 +38,5 @@ var AdminSchema = mongoose.Schema({
 
 
 
-var AdminList = mongoose.model("admins", AdminSchema)
-module.exports = AdminList
+var StudentList = mongoose.model("students", StudentSchema)
+module.exports = StudentList
