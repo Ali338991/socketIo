@@ -1,7 +1,7 @@
 var express = require("express")
 var router = express.Router();
 
-let {addAdmin,getAdminList,temporaryBlok,permanentBlok,fullControl} = require('./AdminController')
+let {addAdmin,getAdminList,temporaryBlok,permanentBlok,fullControl,updateAdmin,deleteAdmin} = require('./AdminController')
 let {uploadImage} = require('../../../config/Multer')
 
 router.post('/addAdmin',uploadImage, (req,res)=>{   
@@ -24,8 +24,12 @@ router.post('/fullControl', (req,res)=>{
     fullControl(req,res)
 })
 
-router.post('/updateAdmin', (req,res)=>{   
-    // fullControl(req,res)
+router.post('/updateAdmin',uploadImage, (req,res)=>{   
+    updateAdmin(req,res)
+})
+
+router.post('/deleteAdmin',uploadImage, (req,res)=>{   
+    deleteAdmin(req,res)
 })
 
 
