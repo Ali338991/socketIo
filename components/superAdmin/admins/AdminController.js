@@ -3,7 +3,7 @@ var AdminList = require("./AdminModel");
 module.exports.addAdmin = async (req, res) => {
   console.log("addAdmin", req.body);
   const { name, userName, email, mobile, role, status } = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!name || !userName || !email || !mobile || !role || !status) {
     res.status(400).send("All params are required");
@@ -12,7 +12,6 @@ module.exports.addAdmin = async (req, res) => {
   const newAdminList = new AdminList({
     name, userName, email, mobile, role, status,
     image: filename,
-
   });
   console.log("newAdminList", newAdminList);
 
@@ -107,7 +106,7 @@ module.exports.fullControl = async (req, res) => {
 
 module.exports.updateAdmin = async (req, res) => {
   const { name, userName, email, mobile, role, status,id } = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!id || !name || !userName || !email || !mobile || !role || !status) {
     res.status(400).send("All params are required");

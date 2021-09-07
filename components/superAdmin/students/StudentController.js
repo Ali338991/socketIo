@@ -3,7 +3,7 @@ var StudentList = require("./StudentModel");
 module.exports.addStudent = async (req, res) => {
   console.log("addStudent", req.body);
   const { name, userName, email, mobile, role, status,course } = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!name || !userName || !email || !mobile || !role || !status || !course) {
     res.status(400).send("All params are required");
@@ -96,7 +96,7 @@ module.exports.fullControl = async (req, res) => {
 
 module.exports.updateStudent = async (req, res) => {
   const { name, userName, email, mobile, role, status,id,course} = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename;
   console.log("fileName", filename);
   if (!id || !name || !userName || !email || !mobile || !role || !status || !course) {
     res.status(400).send("All params are required");
