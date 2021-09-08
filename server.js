@@ -5,11 +5,14 @@ var bodyParser = require("body-parser")
 var dbConnection = require("./config/Db");
 const port = process.env.PORT || 5000;
 // Routes List
-// var ordersRoute = require("./components/orders/OrdersRoutes");
-// var AuthRoutes = require("./components/auth/AuthRoutes");
+
+//SuperAdmin --superAdmin
  var AdminRoutes = require("./components/superAdmin/admins/AdminRoutes");
  var teacherRoutes=require('./components/superAdmin/teachers/TeacherRoutes');
  var StudentRoutes = require("./components/superAdmin/students/StudentRoutes");
+
+//userWeb --student
+var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
 
 
 
@@ -28,13 +31,14 @@ dbConnection();
 app.get("/", function (req, res) {
   res.send("Server is working");
 });
-
+//SuperAdmin --superAdmin
 app.use("/superAdmin/admins", AdminRoutes);
 app.use("/superAdmin/teachers", teacherRoutes);
 app.use("/superAdmin/students", StudentRoutes);
 
 
-
+//userWeb --student
+app.use("/userWeb/SuccessStories", SuccessStoriesRoutes);
 
 // server port listener
 app.listen(port, (err) => {
