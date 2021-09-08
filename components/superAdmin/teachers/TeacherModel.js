@@ -15,7 +15,6 @@ var teacherSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
     },
     cnic: {
         type: Number,
@@ -33,6 +32,9 @@ var teacherSchema = mongoose.Schema({
         type: Boolean,
     },
     permanentBlockStatus: {
+        type: Boolean,
+    },
+    fullControlStatus: {
         type: Boolean,
     },
 })
