@@ -1,6 +1,6 @@
 var teacherObject = require('./TeacherModel');
 
-module.exports.addTeacher = (req, res) => {
+module.exports.addTeacher = async(req, res) => {
   const { name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus } = req.body;
   const fileName = req.file?.filename;
   const addTeacherInDb = new teacherObject({
@@ -15,7 +15,7 @@ module.exports.addTeacher = (req, res) => {
   });
 };
 
-module.exports.getTeachers = (req, res) => {
+module.exports.getTeachers = async(req, res) => {
   await teacherObject.find({}, (err, data) => {
     if (err) {
       res.send(err.message);
@@ -24,7 +24,7 @@ module.exports.getTeachers = (req, res) => {
   });
 };
 
-module.exports.temporaryBlock = (req, res) => {
+module.exports.temporaryBlock = async(req, res) => {
   const { id ,temporaryBlockStatus} = req.body;
   if (!id) {
     res.status(400).send("Teacher Id not found");
@@ -107,22 +107,9 @@ module.exports.updateTeacher = async (req, res) => {
           res.status(501).send(err.message);
       }
       res.status(200).send("Updated Successfully");
-  });const { name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus, id } = req.body;
-    const fileName = req.file?.filename;
-    const teacher = await teacherObject.findByIdAndUpdate(id, {
-        name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus,
-        image: fileName,
-    }
-    )
-    if (!teacher) {
-        res.status(400).send("Teacher not found");
-    }
-    teacher.save((err, data) => {
-        if (err) {
-            res.status(501).send(err.message);
-        }
-        res.status(200).send("Updated Successfully");
-    });
+  });
+  
+  
 };
 
 module.exports.deleteTeacher = async (req, res) => {

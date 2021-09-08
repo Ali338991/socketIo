@@ -34,12 +34,7 @@ app.use("/superAdmin/teachers", teacherRoutes);
 app.use("/superAdmin/students", StudentRoutes);
 
 
-// app.use("/auth", AuthRoutes);
-// app.use("/orders", ordersRoute);
 
-// ip:port/auth/login - post
-// ip:port/orders/createOrder - post
-// ip:port/orders - get
 
 // server port listener
 app.listen(port, (err) => {
