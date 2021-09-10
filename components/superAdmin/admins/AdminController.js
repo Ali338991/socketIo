@@ -1,4 +1,6 @@
 var AdminList = require("./AdminModel");
+let {sendEmail}=require('../../../utils/sendEmail');
+
 //Function to add Admin
 module.exports.addAdmin = async (req, res) => {
   const { name, userName, email, mobile, role, status } = req.body;
@@ -16,6 +18,7 @@ module.exports.addAdmin = async (req, res) => {
       res.status(501).send("error happen");
     }
     res.status(200).send("Admin Added Successfully");
+    sendEmail(email);
   });
 };
 

@@ -4,23 +4,23 @@ const MailerSend = require("mailersend");
 const mailersend = new MailerSend({
   api_key: process.env.apiKey,
 });
-module.exports.sendEmail = async (req,res) => {
+module.exports.sendEmail = async (email) => {
   try{
     const recipients = [
-      new Recipient("muhammadmuneebtahir7860@gmail.com", "Your Client")
+      new Recipient("your@domain.com", "Your Client")
     ];
   
     const emailParams = new EmailParams()
-      .setFrom("info@trainings.techloset.com")
+      .setFrom("your@domain.com")
       .setFromName("domain")
       .setRecipients(recipients)
       .setSubject("Subject")
       .setHtml("This is the HTML content")
       .setText("This is the text content");
     await mailersend.send(emailParams);
-    res.send("Email Send")
+    console.log(email);
   }
   catch(error){
-    res.send(error.message)
+    console.log(error.message);
   }
 };
