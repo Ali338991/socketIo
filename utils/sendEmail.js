@@ -7,7 +7,7 @@ const mailersend = new MailerSend({
 module.exports.sendEmail = async (req,res) => {
   try{
     const recipients = [
-      new Recipient("your@domain.com", "Your Client")
+      new Recipient("muhammadmuneebtahir7860@gmail.com", "Your Client")
     ];
   
     const emailParams = new EmailParams()

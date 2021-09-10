@@ -1,5 +1,5 @@
 var teacherObject = require('./TeacherModel');
-var sendEmail=require('../../../utils/sendEmail');
+let {sendEmail}=require('../../../utils/sendEmail');
 module.exports.addTeacher = async (req, res) => {
   const { name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus } = req.body;
   const fileName = req.file?.filename;
@@ -12,7 +12,7 @@ module.exports.addTeacher = async (req, res) => {
       res.status(501).send(err.message);
     }
     res.status(200).json(addTeacherInDb);
-    sendEmail(req,res)
+    sendEmail(req,res);
   });
 };
 
