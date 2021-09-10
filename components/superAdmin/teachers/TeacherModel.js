@@ -40,5 +40,5 @@ var teacherSchema = mongoose.Schema({
 })
 
 
-var teacherObject = mongoose.model("Teachers", teacherSchema);
+var teacherObject = mongoose.model("teachers", teacherSchema);
 module.exports = teacherObject;
