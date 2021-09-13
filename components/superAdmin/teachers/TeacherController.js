@@ -1,6 +1,6 @@
 var teacherObject = require('./TeacherModel');
 
-module.exports.addTeacher = async(req, res) => {
+module.exports.addTeacher = async (req, res) => {
   const { name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus } = req.body;
   const fileName = req.file?.filename;
   const addTeacherInDb = new teacherObject({
@@ -11,11 +11,11 @@ module.exports.addTeacher = async(req, res) => {
     if (err) {
       res.status(501).send(err.message);
     }
-    res.status(200).send("Teacher Added Successfully");
+    res.status(200).json(addTeacherInDb);
   });
 };
 
-module.exports.getTeachers = async(req, res) => {
+module.exports.getTeachers = async (req, res) => {
   await teacherObject.find({}, (err, data) => {
     if (err) {
       res.send(err.message);
@@ -24,8 +24,8 @@ module.exports.getTeachers = async(req, res) => {
   });
 };
 
-module.exports.temporaryBlock = async(req, res) => {
-  const { id ,temporaryBlockStatus} = req.body;
+module.exports.temporaryBlock = async (req, res) => {
+  const { id, temporaryBlockStatus } = req.body;
   if (!id) {
     res.status(400).send("Teacher Id not found");
   }
@@ -43,34 +43,34 @@ module.exports.temporaryBlock = async(req, res) => {
     if (err) {
       res.status(501).send(err.message);
     }
-    res.status(200).send("Teacher Temporary Block Successfully");
+    res.status(200).json(teacher);
   });
 };
 
 module.exports.permanentBlock = async (req, res) => {
   const { id } = req.body;
   if (!id) {
-      res.status(400).send("Teacher Id not found");
+    res.status(400).send("Teacher Id not found");
   }
   const teacher = await teacherObject.findByIdAndUpdate(id, {
-      permanentBlockStatus: true,
-      temporaryBlockStatus: false,
-      fullControlStatus: false,
+    permanentBlockStatus: true,
+    temporaryBlockStatus: false,
+    fullControlStatus: false,
   }
   )
   if (!teacher) {
-      res.status(400).send("Teacher not found");
+    res.status(400).send("Teacher not found");
   }
   teacher.save((err, data) => {
-      if (err) {
-          res.status(501).send(err.message);
-      }
-      res.status(200).send("Teacher Permanent Block Successfully");
+    if (err) {
+      res.status(501).send(err.message);
+    }
+    res.status(200).json(teacher);
   });
 };
 
 module.exports.fullControl = async (req, res) => {
-  const { id ,fullControlStatus} = req.body;
+  const { id, fullControlStatus } = req.body;
   if (!id) {
     res.status(400).send("Teacher Id not found");
   }
@@ -87,7 +87,7 @@ module.exports.fullControl = async (req, res) => {
     if (err) {
       res.status(501).send(err.message);
     }
-    res.status(200).send("Now Teacher have full Control");
+    res.status(200).json(teacher);
   });
 };
 
@@ -95,31 +95,30 @@ module.exports.updateTeacher = async (req, res) => {
   const { name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus, id } = req.body;
   const fileName = req.file?.filename;
   const teacher = await teacherObject.findByIdAndUpdate(id, {
-      name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus,
-      image: fileName,
+    name, userName, email, mobileNumber, cnic, address, fullControlStatus, permanentBlockStatus, temporaryBlockStatus,
+    image: fileName,
   }
   )
   if (!teacher) {
-      res.status(400).send("Teacher not found");
+    res.status(400).send("Teacher not found");
   }
   teacher.save((err, data) => {
-      if (err) {
-          res.status(501).send(err.message);
-      }
-      res.status(200).send("Updated Successfully");
+    if (err) {
+      res.status(501).send(err.message);
+    }
+    res.status(200).json(teacher);
   });
-  
-  
 };
 
 module.exports.deleteTeacher = async (req, res) => {
   const { id } = req.body;
-    if (!id) {
-        res.status(400).send("Teacher id not found");
-    }
-    const teacher = await teacherObject.findByIdAndDelete({ _id: id });
-    if (!teacher) {
-        res.status(400).send("Teacher not found");
-    }
-    res.status(200).send("Teacher deleted Successfully");
+  if (!id) {
+    res.status(400).send("Teacher id not found");
+  }
+  const teacher = await teacherObject.findByIdAndDelete({ _id: id });
+  if (!teacher) {
+    res.status(400).send("Teacher not found");
+  }
+  res.status(200).send("Teacher deleted Successfully");
 };
+
