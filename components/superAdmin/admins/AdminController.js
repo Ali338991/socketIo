@@ -1,6 +1,50 @@
 var AdminList = require("./AdminModel");
+var bycrypt = require("bcryptjs")
+var jwt = require("jsonwebtoken");
 let { sendEmail } = require('../../../utils/sendEmail');
 
+//login
+module.exports.login = async (req, res) => {
+  if (!req.body?.email) {
+    res.status(400).json({ status: "error", message: "email required", statusCode: 400 })
+    return
+  } else if (!req.body?.password) {
+    res.status(400).json({ status: "error", message: "password Required", statusCode: 400 })
+    return
+  }else{
+  const { email, password } = req.body;
+  const admin = await AdminList.findOne({ email: email });
+  if (!admin) {
+    res.status(400).json({ status: "error", message: "Email not found", statusCode: 400 }) 
+    return  
+  } else if (!await bycrypt.compare(password, admin.password)) {
+    res.status(400).json({ status: "error", message: "Your password is not correct", statusCode: 400 })   
+    return
+  }
+  var token = await jwt.sign(
+    { email: admin.email, name: admin.name },
+    process.env.jwtKey
+  );
+  let adminRecord = {
+    name:admin.name,
+    userName:admin.userName,
+    email:admin.email,
+    mobile:admin.mobile,
+    phone:admin.phone,
+     token,
+  };
+  res.status(202).json({ status: "success", message: "Admin get successfully", data:adminRecord , statusCode: 202 })
+
+
+
+
+
+  }
+  
+  
+  
+
+};
 //Add Admin
 module.exports.addAdmin = async (req, res) => {
   if (!req.body?.name) {
