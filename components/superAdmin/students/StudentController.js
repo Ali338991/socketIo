@@ -1,122 +1,195 @@
 var StudentList = require("./StudentModel");
-//Function to add Student
+let { sendEmail } = require('../../../utils/sendEmail');
+
+//Add Student
 module.exports.addStudent = async (req, res) => {
-  const { name, userName, email, mobile, role,course } = req.body;
-  const filename = req.file?.filename;
-  if (!name || !userName || !email || !mobile || !role || !course) {
-    res.status(400).send("All params are required");
-  }
-  const newStudentList = new StudentList({
-    name, userName, email, mobile, role, course,
-    status:"fullControl",
-    image: filename,
-
-  });
-  newStudentList.save((err, success) => {
-    if (err) {
-      res.status(501).send("error happen");
+  if (!req.body?.name) {
+    res.status(400).json({ status: "error", message: "Name required", statusCode: 400 })
+    return
+  } else if (!req.body?.userName) {
+    res.status(400).json({ status: "error", message: "User Name Required", statusCode: 400 })
+    return
+  } else if (!req.body?.course) {
+    res.status(400).json({ status: "error", message: "course Required", statusCode: 400 })
+    return
+  } else if (!req.body?.email) {
+    res.status(400).json({ status: "error", message: "Email Required", statusCode: 400 })
+    return
+  } else if (!req.body?.mobile) {
+    res.status(400).json({ status: "error", message: "Mobile Number  Required", statusCode: 400 })
+    return
+  } else {
+    const check = await StudentList.findOne({ email: req.body?.email });
+    if (check) {
+      res.status(400).json({ status: "success", message: "Email already exist", statusCode: 400 })
+      return
     }
-    res.status(200).send("Student Added Successfully");
-  });
+    const filename = req.file?.filename;
+    const { name, userName, email, mobile,course } = req.body;
+    const newStudentList = new StudentList({
+      name, userName, email, mobile,course,
+      status: "fullControl",
+      role: "student",
+      image: filename,
+    });
+    const id = newStudentList?._id
+    const yourRole = newStudentList?.role
+    const portal = process.env.StudentPortal
+    await sendEmail(id, portal, email, name, yourRole, res);
+    newStudentList.save((err, success) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success",data:success, message: "Student Created and Send Email Successfully", statusCode: 201 })
+      return
+    });
+  }
 };
-
-
+//Get List of Student
 module.exports.getStudentList = async (req, res) => {
-  const getStudentList = await StudentList.find({});
-  res.status(200).json(getStudentList);
+  try {
+    const getStudentList = await StudentList.find({});
+    res.status(202).json({ status: "success", message: "Get list of Student Successfully", data:getStudentList , statusCode: 202 })
+    return
+  } catch (error) {
+    res.status(400).json({ status: "success", message: err?.message, statusCode: 400 })
+    return
+  }
 };
-
 //temporaryBlok
 module.exports.temporaryBlok = async (req, res) => {
-  const { id } = req.body;
-  if (!id) {
-    res.status(400).send("All params are required");
-  }
-  const Student = await StudentList.findByIdAndUpdate(id, {
-    Status: "temporaryBlok",
-  }, { new: true }
-  )
-  if (!Student) {
-    res.status(400).send("Your id is incorrect");
-  }
-  Student.save((err, data) => {
-    if (err) {
-      res.status(501).send("error happen");
-    }
-    res.status(200).send("Student Temporary Blok Successfully");
-  });
-};
-
-module.exports.permanentBlok = async (req, res) => {
-  const { id } = req.body;
-  if (!id) {
-    res.status(400).send("All params are required");
-  }
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return
+  } else {
+    const { id } = req.body;
     const Student = await StudentList.findByIdAndUpdate(id, {
-    Status: "permanentBlok",
-  }, { new: true }
-  )
-  if (!Student) {
-    res.status(400).send("Your id is incorrect");
-  }
-  Student.save((err, data) => {
-    if (err) {
-      res.status(501).send("error happen");
+      status: "temporaryBlok",
+    }, { new: true }
+    )
+    if (!Student) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
     }
-    res.status(200).send("Student Permanent Blok Successfully");
-  });
-};
+    Student.save((err, data) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success",data:data, message: "Student temporary blok Successfully", statusCode: 201 })
+      return
+    });
 
+  }
+};
+//Permanent Blok 
+module.exports.permanentBlok = async (req, res) => {
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return
+  } else {
+    const { id } = req.body;
+    const Student = await StudentList.findByIdAndUpdate(id, {
+      status: "permanentBlok",
+    }, { new: true }
+    )
+    if (!Student) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
+    }
+    Student.save((err, data) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success",data:data, message: "Student permanent blok Successfully", statusCode: 201 })
+      return
+    });
+  }
+};
+//fullControl
 module.exports.fullControl = async (req, res) => {
-  const { id } = req.body;
-  if (!id) {
-    res.status(400).send("All params are required");
-  }
-  const Student = await StudentList.findByIdAndUpdate(id, {
-    Status: "fullControl",
-  }, { new: true }
-  )
-  if (!Student) {
-    res.status(400).send("Your id is incorrect");
-  }
-  Student.save((err, data) => {
-    if (err) {
-      res.status(501).send("error happen");
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return
+  } else {
+    const { id } = req.body;
+    const Student = await StudentList.findByIdAndUpdate(id, {
+      status: "fullControl",
+    }, { new: true }
+    )
+    if (!Student) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
     }
-    res.status(200).send("Now Student has full Control");
-  });
-};
-
-module.exports.updateStudent = async (req, res) => {
-  const { name, userName, email, mobile, role, status,id,course} = req.body;
-  const filename = req.file?.filename;
-  if (!id || !name || !userName || !email || !mobile || !role || !status || !course) {
-    res.status(400).send("All params are required");
+    Student.save((err, data) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success",data:data, message: "Now Student has FullControl", statusCode: 201 })
+      return
+    });
   }
+};
+//updateStudent
+module.exports.updateStudent = async (req, res) => {
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return    
+  }else if (!req.body?.name) {
+    res.status(400).json({ status: "error", message: "Name required", statusCode: 400 })
+    return
+  } else if (!req.body?.userName) {
+    res.status(400).json({ status: "error", message: "User Name Required", statusCode: 400 })
+    return
+  } else if (!req.body?.course) {
+    res.status(400).json({ status: "error", message: "course Required", statusCode: 400 })
+    return
+  } else if (!req.body?.email) {
+    res.status(400).json({ status: "error", message: "Email Required", statusCode: 400 })
+    return
+  } else if (!req.body?.mobile) {
+    res.status(400).json({ status: "error", message: "Mobile Number  Required", statusCode: 400 })
+    return
+  }else{
+  const { name, userName, email, mobile,id,course } = req.body;
+  const filename = req.file?.filename;
   const Student = await StudentList.findByIdAndUpdate(id, {
-    name, userName, email, mobile, role, status,course,
+    name, userName, email, mobile,course,
     image: filename,
   }, { new: true }
   )
-  if (!Student) {
-    res.status(400).send("Your id is incorrect");
-  }
-  Student.save((err, data) => {
-    if (err) {
-      res.status(501).send("error happen");
+   if (!Student) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
     }
-    res.status(200).send("update Successful");
-  });
-};
-
-module.exports.deleteStudent = async (req, res) => {
-  const {id} = req.body;   
-   if (!id) {
-    res.status(400).send("All params are required");
-  }
-  const Student = await StudentList.findByIdAndDelete({_id:id});
-  if (!Student) {
-    res.status(400).send("Your id is incorrect");
+    Student.save((err, data) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success",data:data, message: "Update Student Successfully", statusCode: 201 })
+      return
+    });
   }  
-  res.status(200).send("Student Delete Successfully");
+};
+//deleteStudent
+module.exports.deleteStudent = async (req, res) => {
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return    
+  }else{
+    const { id } = req.body;
+    const Student = await StudentList.findByIdAndDelete({ _id: id });
+    if (!Student) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+       return
+    }
+    res.status(201).json({ status: "success", message: "Student  Delete Successfully", statusCode: 201 })
+    return
+  }
+
+
 };

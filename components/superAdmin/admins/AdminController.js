@@ -38,7 +38,7 @@ module.exports.addAdmin = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", message: "Admin Created and Send Email Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success",data:success, message: "Admin Created and Send Email Successfully", statusCode: 201 })
       return
     });
   }
@@ -47,7 +47,7 @@ module.exports.addAdmin = async (req, res) => {
 module.exports.getAdminList = async (req, res) => {
   try {
     const getAdminList = await AdminList.find({});
-    res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data: { getAdminList }, statusCode: 202 })
+    res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data:getAdminList , statusCode: 202 })
     return
   } catch (error) {
     res.status(400).json({ status: "success", message: { error }, statusCode: 400 })
@@ -74,7 +74,7 @@ module.exports.temporaryBlok = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", message: "Admin temporary blok Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success",data:data, message: "Admin temporary blok Successfully", statusCode: 201 })
       return
     });
 
@@ -100,7 +100,7 @@ module.exports.permanentBlok = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", message: "Admin permanent blok Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success",data:data, message: "Admin permanent blok Successfully", statusCode: 201 })
       return
     });
   }
@@ -125,7 +125,7 @@ module.exports.fullControl = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", message: "Now Admin has FullControl", statusCode: 201 })
+      res.status(201).json({ status: "success",data:data, message: "Now Admin has FullControl", statusCode: 201 })
       return
     });
   }
@@ -155,7 +155,6 @@ module.exports.updateAdmin = async (req, res) => {
     image: filename,
   }, { new: true }
   )
-  console.log("admin",Admin);
    if (!Admin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
@@ -165,7 +164,7 @@ module.exports.updateAdmin = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", message: "Update Admin Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success",data:data, message: "Update Admin Successfully", statusCode: 201 })
       return
     });
   }  
@@ -180,7 +179,7 @@ module.exports.deleteAdmin = async (req, res) => {
     const Admin = await AdminList.findByIdAndDelete({ _id: id });
     if (!Admin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
-return
+       return
     }
     res.status(201).json({ status: "success", message: "Admin  Delete Successfully", statusCode: 201 })
     return
