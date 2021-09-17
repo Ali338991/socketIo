@@ -16,6 +16,9 @@ var StudentSchema = mongoose.Schema({
   image:{
     type: String,
   },
+  password:{
+    type: String,
+  },
   mobile:{
     type: Number,
       required:true
@@ -32,6 +35,10 @@ var StudentSchema = mongoose.Schema({
     type: String,
       required:true
   },
+  cloudinaryId:{
+    type: String,
+  }
+ 
  
 })
 

@@ -2,6 +2,7 @@ var AdminList = require("./AdminModel");
 var bycrypt = require("bcryptjs")
 var jwt = require("jsonwebtoken");
 let { sendEmail } = require('../../../utils/sendEmail');
+const cloudinary  = require('../../../config/Cloudinary');
 
 //login
 module.exports.login = async (req, res) => {
@@ -62,13 +63,14 @@ module.exports.addAdmin = async (req, res) => {
       res.status(400).json({ status: "success", message: "Email already exist", statusCode: 400 })
       return
     }
-    const filename = req.file?.filename;
+    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" });
     const { name, userName, email, mobile } = req.body;
     const newAdminList = new AdminList({
       name, userName, email, mobile,
       status: "fullControl",
       role: "Admin",
-      image: filename,
+      image: filename?.secure_url,
+      cloudinaryId:filename?.public_id,
     });
     const id = newAdminList?._id
     const yourRole = newAdminList?.role
@@ -189,17 +191,21 @@ module.exports.updateAdmin = async (req, res) => {
     res.status(400).json({ status: "error", message: "Mobile Number  Required", statusCode: 400 })
     return
   } else {
-    const { name, userName, email, mobile, id } = req.body;
-    const filename = req.file?.filename;
-    const Admin = await AdminList.findByIdAndUpdate(id, {
-      name, userName, email, mobile,
-      image: filename,
-    }, { new: true }
-    )
-    if (!Admin) {
+    const  findAdmin = await AdminList.findById(req.body?.id);
+    if (!findAdmin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
-    }
+    }  
+    await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
+    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/" });    
+    const { name, userName, email, mobile, id } = req.body;
+    const Admin = await AdminList.findByIdAndUpdate(id, {
+      name, userName, email, mobile,
+      image: filename?.secure_url,
+      cloudinaryId:filename?.public_id,
+    }, { new: true }
+    )
+   
     Admin.save((err, data) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
@@ -217,6 +223,12 @@ module.exports.deleteAdmin = async (req, res) => {
     return
   } else {
     const { id } = req.body;
+    const  findAdmin = await AdminList.findById({_id:id});
+    if (!findAdmin) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
+    }
+    await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
     const Admin = await AdminList.findByIdAndDelete({ _id: id });
     if (!Admin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
@@ -228,3 +240,5 @@ module.exports.deleteAdmin = async (req, res) => {
 
 
 };
+
+

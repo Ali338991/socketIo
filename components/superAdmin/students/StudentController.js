@@ -1,5 +1,7 @@
 var StudentList = require("./StudentModel");
 let { sendEmail } = require('../../../utils/sendEmail');
+const cloudinary  = require('../../../config/Cloudinary');
+
 
 //Add Student
 module.exports.addStudent = async (req, res) => {
@@ -24,13 +26,14 @@ module.exports.addStudent = async (req, res) => {
       res.status(400).json({ status: "success", message: "Email already exist", statusCode: 400 })
       return
     }
-    const filename = req.file?.filename;
+    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Student/" });
     const { name, userName, email, mobile,course } = req.body;
     const newStudentList = new StudentList({
       name, userName, email, mobile,course,
       status: "fullControl",
       role: "student",
-      image: filename,
+      image: filename?.secure_url,
+      cloudinaryId:filename?.public_id,
     });
     const id = newStudentList?._id
     const yourRole = newStudentList?.role
@@ -154,17 +157,23 @@ module.exports.updateStudent = async (req, res) => {
     res.status(400).json({ status: "error", message: "Mobile Number  Required", statusCode: 400 })
     return
   }else{
-  const { name, userName, email, mobile,id,course } = req.body;
-  const filename = req.file?.filename;
-  const Student = await StudentList.findByIdAndUpdate(id, {
-    name, userName, email, mobile,course,
-    image: filename,
-  }, { new: true }
-  )
-   if (!Student) {
+
+    const  findStudent = await StudentList.findById(req.body?.id);
+    if (!findStudent) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
-    }
+    }  
+    await cloudinary.uploader.destroy(findStudent.cloudinaryId);
+    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Student/" });  
+
+  const { name, userName, email, mobile,id,course } = req.body;
+  const Student = await StudentList.findByIdAndUpdate(id, {
+    name, userName, email, mobile,course,
+    image: filename?.secure_url,
+    cloudinaryId:filename?.public_id,
+  }, { new: true }
+  )
+   
     Student.save((err, data) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
@@ -182,6 +191,12 @@ module.exports.deleteStudent = async (req, res) => {
     return    
   }else{
     const { id } = req.body;
+    const  findStudent = await StudentList.findById({_id:id});
+    if (!findStudent) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
+    }
+    await cloudinary.uploader.destroy(findStudent.cloudinaryId);
     const Student = await StudentList.findByIdAndDelete({ _id: id });
     if (!Student) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })

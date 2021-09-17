@@ -12,7 +12,6 @@ router.post('/login', (req,res)=>{
 router.post('/addAdmin',uploadImage, (req,res)=>{   
     addAdmin(req,res)
 })
-
 router.get('/getAdminList', (req,res)=>{   
     getAdminList(req,res)
 })
@@ -36,6 +35,7 @@ router.put('/updateAdmin',uploadImage, (req,res)=>{
 router.delete('/deleteAdmin',(req,res)=>{   
     deleteAdmin(req,res)
 })
+
 
 
 

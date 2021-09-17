@@ -17,10 +17,10 @@ var teacherSchema = mongoose.Schema({
         type: String,
     },
     cnic: {
-        type: Number,
+        type: String,
         required: true,
     },
-    mobileNumber: {
+    mobile: {
         type: Number,
         required: true,
     },
@@ -28,15 +28,13 @@ var teacherSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    temporaryBlockStatus: {
-        type: Boolean,
-    },
-    permanentBlockStatus: {
-        type: Boolean,
-    },
-    fullControlStatus: {
-        type: Boolean,
-    },
+    status:{
+        type: String,
+          required:true
+      },
+      cloudinaryId:{
+        type: String,
+      }
 })
 
 
