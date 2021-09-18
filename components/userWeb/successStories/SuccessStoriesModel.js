@@ -27,6 +27,9 @@ var SuccessStoriesSchema = mongoose.Schema({
   whyReject: {
     type: String,    
   },
+  cloudinaryId:{
+    type: String,
+  }
 
 })
 

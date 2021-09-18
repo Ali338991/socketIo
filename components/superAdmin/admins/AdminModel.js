@@ -15,7 +15,6 @@ var AdminSchema = mongoose.Schema({
   },
   password:{
     type: String,
-      required:true
   },  
   image:{
     type: String,
@@ -32,6 +31,9 @@ var AdminSchema = mongoose.Schema({
     type: String,
       required:true
   },
+  cloudinaryId:{
+    type: String,
+  }
  
 })
 
