@@ -9,11 +9,7 @@ var AdminSchema = mongoose.Schema({
     type: String,
       required:true
   }, 
-  email:{
-    type: String,
-      required:true
-  },
-  password:{
+   password:{
     type: String,
   },  
   image:{
@@ -33,7 +29,20 @@ var AdminSchema = mongoose.Schema({
   },
   cloudinaryId:{
     type: String,
-  }
+  },
+  email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    unique: true,
+    validate: {
+    validator: function(v) {
+    return /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(v);
+    },
+    message: "Please enter a valid email"
+    },
+    required: [true, "Email required"]
+    }
  
 })
 
