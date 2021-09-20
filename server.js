@@ -11,10 +11,11 @@ const port = process.env.PORT || 5000;
  var teacherRoutes=require('./components/superAdmin/teachers/TeacherRoutes');
  var StudentRoutes = require("./components/superAdmin/students/StudentRoutes");
 var AdminLoginRoutes= require("./components/superAdmin/admins/AdminLoginRoute")
+//Teacher-api-route
+var CoursesRoutes= require("./components/superAdmin/teacher/courses/CoursesRoutes")
 //userWeb --student
 var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
-//Teacher Portal
-var CoursesRoutes= require("./components/teacherPortal/courses/CoursesRoutes")
+
 
 
 
@@ -39,14 +40,16 @@ app.use("/superAdmin/admins", AdminRoutes);
 app.use("/superAdmin/teachers", teacherRoutes);
 app.use("/superAdmin/students", StudentRoutes);
 app.use("/admins", AdminLoginRoutes);
+//Teacher-api-route
+app.use("/superAdmin/teacher/courses", CoursesRoutes);
+
 
 
 
 //userWeb --student
 app.use("/userWeb/SuccessStories", SuccessStoriesRoutes);
 
-//Teacher Portal
-app.use("/teacherPortal/courses", CoursesRoutes);
+
 
 
 // server port listener

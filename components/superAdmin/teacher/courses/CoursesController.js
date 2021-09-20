@@ -1,6 +1,5 @@
 var CoursesList = require("./CoursesModel");
-let { launchCourse } = require('../../../utils/sendEmail');
-const cloudinary  = require('../../../config/Cloudinary');
+let { launchCourse } = require('../../../../utils/sendEmail');
 
 
 //Add Courses
