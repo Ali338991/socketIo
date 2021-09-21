@@ -1,6 +1,5 @@
 var mongoose = require("mongoose")
-var AdminSchema = mongoose.Schema({
- 
+var AdminSchema = mongoose.Schema({ 
   name:{
     type: String,
       required:true
@@ -42,7 +41,13 @@ var AdminSchema = mongoose.Schema({
     message: "Please enter a valid email"
     },
     required: [true, "Email required"]
-    }
+    },
+    cnic:{
+      type: String,
+  },
+  address:{
+      type: String,
+  }
  
 })
 

@@ -1,4 +1,4 @@
-var teacherObject = require('./TeacherModel');
+var teacherObject = require('../admins/AdminModel');
 const cloudinary  = require('../../../config/Cloudinary');
 let { sendEmail } = require('../../../utils/sendEmail');
 
@@ -35,7 +35,7 @@ module.exports.addTeacher = async (req, res) => {
     status: "fullControl",    
     image: filename?.secure_url,
     cloudinaryId:filename?.public_id,
-    role: "Teacher",
+    role: "teacher",
   });
   const id = addTeacherInDb?._id
   const yourRole = addTeacherInDb?.role
@@ -54,7 +54,7 @@ module.exports.addTeacher = async (req, res) => {
 
 module.exports.getTeachers = async (req, res) => {
   try {
-    const getTeacherList =  await teacherObject.find({})
+    const getTeacherList =  await teacherObject.find({role:'teacher'})
     res.status(202).json({ status: "success", message: "Get list of Teacher Successfully", data: getTeacherList, statusCode: 202 })
     return
   } catch (error) {

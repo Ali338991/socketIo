@@ -32,6 +32,7 @@ module.exports.login = async (req, res) => {
       email: admin.email,
       mobile: admin.mobile,
       phone: admin.phone,
+      role:admin.role,
       token,
     };
     res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 })
@@ -59,6 +60,7 @@ module.exports.getActiveUser = async (req, res) => {
       email: admin.email,
       mobile: admin.mobile,
       phone: admin.phone,
+      role:admin.role,
     };
     res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 });     
     }
@@ -90,7 +92,7 @@ module.exports.addAdmin = async (req, res) => {
     const newAdminList = new AdminList({
       name, userName, email, mobile,
       status: "fullControl",
-      role: "Admin",
+      role: "admin",
       image: filename?.secure_url,
       cloudinaryId:filename?.public_id,
     });
@@ -111,7 +113,7 @@ module.exports.addAdmin = async (req, res) => {
 //Get List of Admin
 module.exports.getAdminList = async (req, res) => {
   try {
-    const getAdminList = await AdminList.find({});
+    const getAdminList = await AdminList.find({role:'admin'});
     res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data: getAdminList, statusCode: 202 })
     return
   } catch (error) {
@@ -219,7 +221,7 @@ module.exports.updateAdmin = async (req, res) => {
       return
     }  
     await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
-    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/" });    
+    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" });    
     const { name, userName, email, mobile, id } = req.body;
     const Admin = await AdminList.findByIdAndUpdate(id, {
       name, userName, email, mobile,
