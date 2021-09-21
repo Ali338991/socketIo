@@ -41,12 +41,12 @@ module.exports.addTeacher = async (req, res) => {
   const yourRole = addTeacherInDb?.role
   const portal = process.env.AdminPortal
   await sendEmail(id, portal, email, name, yourRole, res);
-  await addTeacherInDb.save((err, success) => {
+  await addTeacherInDb.save((err, data) => {
     if (err) {
       res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
       return
     }
-    res.status(201).json({ status: "success", data: success, message: "Teacher Created and Send Email Successfully", statusCode: 201 })
+    res.status(201).json({ status: "success", data: data, message: "Teacher Created and Send Email Successfully", statusCode: 201 })
     return
   });
   }
@@ -77,11 +77,22 @@ module.exports.temporaryBlock = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-   await Teacher.save((err, data) => {
+   await Teacher.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Teacher temporary blok Successfully", statusCode: 201 })
       return
     });
@@ -102,11 +113,22 @@ module.exports.permanentBlock = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-  await Teacher.save((err, data) => {
+  await Teacher.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Teacher permanent blok Successfully", statusCode: 201 })
       return
     });
@@ -127,11 +149,22 @@ module.exports.fullControl = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-  await  Teacher.save((err, data) => {
+  await  Teacher.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Now Teacher has FullControl", statusCode: 201 })
       return
     });
@@ -180,7 +213,18 @@ module.exports.updateTeacher = async (req, res) => {
       res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
       return
     }
-    res.status(201).json({ status: "success", data: success, message: "Update Successful", statusCode: 201 })
+    let data = {
+      id:success?._id,
+      name: success?.name,
+      userName: success?.userName,
+      email: success?.email,
+      mobile: success?.mobile,
+      status:success?.status,
+      cloudinaryId:success?.cloudinaryId,
+      image:success?.image,
+      role:success?.role,        
+    };
+    res.status(201).json({ status: "success", data: data, message: "Update Successful", statusCode: 201 })
     return
   });
   }

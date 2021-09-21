@@ -26,16 +26,19 @@ module.exports.login = async (req, res) => {
       { email: admin.email, name: admin.name },
       process.env.jwtKey
     );
-    let adminRecord = {
+    let data = {
+      id:admin._id,
       name: admin.name,
       userName: admin.userName,
       email: admin.email,
       mobile: admin.mobile,
-      phone: admin.phone,
+      status:admin.status,
+      cloudinaryId:admin.cloudinaryId,
+      image:admin.image,
       role:admin.role,
       token,
     };
-    res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 })
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 })
 
 
   }
@@ -54,15 +57,19 @@ module.exports.getActiveUser = async (req, res) => {
       res.status(404).json({ status: "error", message: "Email not found", statusCode: 404 })
       return
     } 
-    let adminRecord = {
+    let data = {
+      id:admin._id,
       name: admin.name,
       userName: admin.userName,
       email: admin.email,
       mobile: admin.mobile,
-      phone: admin.phone,
+      status:admin.status,
+      cloudinaryId:admin.cloudinaryId,
+      image:admin.image,
       role:admin.role,
+      
     };
-    res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 });     
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 });     
     }
   }
 };
@@ -100,12 +107,12 @@ module.exports.addAdmin = async (req, res) => {
     const yourRole = newAdminList?.role
     const portal = process.env.AdminPortal
     await sendEmail(id, portal, email, name, yourRole, res);
-    newAdminList.save((err, success) => {
+    newAdminList.save((err, data) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", data: success, message: "Admin Created and Send Email Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success", data: data, message: "Admin Created and Send Email Successfully", statusCode: 201 })
       return
     });
   }
@@ -136,11 +143,22 @@ module.exports.temporaryBlok = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    Admin.save((err, data) => {
+    Admin.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Admin temporary blok Successfully", statusCode: 201 })
       return
     });
@@ -162,11 +180,22 @@ module.exports.permanentBlok = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    Admin.save((err, data) => {
+    Admin.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Admin permanent blok Successfully", statusCode: 201 })
       return
     });
@@ -187,11 +216,22 @@ module.exports.fullControl = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    Admin.save((err, data) => {
+    Admin.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Now Admin has FullControl", statusCode: 201 })
       return
     });
@@ -230,11 +270,22 @@ module.exports.updateAdmin = async (req, res) => {
     }, { new: true }
     )
    
-    Admin.save((err, data) => {
+    Admin.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Update Admin Successfully", statusCode: 201 })
       return
     });
@@ -277,8 +328,13 @@ module.exports.getData = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
+    let data = {
+      name: findAdmin?.name,
+      userName: findAdmin?.userName,
+      email: findAdmin?.email,     
+    };
   
-    res.status(201).json({ status: "success",data:findAdmin, message: "Admin get Successfully", statusCode: 201 })
+    res.status(201).json({ status: "success",data:data, message: "Admin get Successfully", statusCode: 201 })
     return
   }
 
