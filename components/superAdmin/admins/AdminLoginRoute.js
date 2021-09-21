@@ -16,6 +16,9 @@ router.post('/getActiveUser', (req,res)=>{
     getActiveUser(req,res)
 })
 
+router.put('/signUp',(req,res)=>{   
+    signUp(req,res)
+})
 
 router.put('/signUp',(req,res)=>{   
     signUp(req,res)
