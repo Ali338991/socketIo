@@ -1,36 +1,18 @@
 var mongoose = require("mongoose")
-var AdminSchema = mongoose.Schema({
- 
-  name:{
+var CoursesSchema = mongoose.Schema({ 
+  instructorName:{
     type: String,
       required:true
-  }, 
-  userName:{
-    type: String,
-      required:true
-  }, 
-   password:{
-    type: String,
   },  
-  image:{
+  courseName:{
     type: String,
-  },
-  mobile:{
-    type: Number,
       required:true
-  },
+  },  
   status:{
     type: String,
-      required:true
-  }, 
-  role:{
-    type: String,
-      required:true
-  },
-  cloudinaryId:{
-    type: String,
-  },
-  email: {
+    required:true
+  },  
+  teacherEmail: {
     type: String,
     trim: true,
     lowercase: true,
@@ -43,11 +25,10 @@ var AdminSchema = mongoose.Schema({
     },
     required: [true, "Email required"]
     }
- 
 })
 
 
 
 
-var AdminList = mongoose.model("admins", AdminSchema)
-module.exports = AdminList
+var CoursesList = mongoose.model("Courses", CoursesSchema)
+module.exports = CoursesList

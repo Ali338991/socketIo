@@ -38,11 +38,33 @@ module.exports.login = async (req, res) => {
 
 
   }
-
-
-
-
 };
+
+module.exports.getActiveUser = async (req, res) => {
+  if (!req.body?.token) {
+    res.status(400).json({ status: "error", message: "token required", statusCode: 400 })
+    return
+  } else {
+    const { token } = req.body;
+    var decoded = await jwt.verify(token, process.env.jwtKey);
+    if (decoded.email) {
+    const admin = await AdminList.findOne({ email: decoded?.email });
+    if (!admin) {
+      res.status(404).json({ status: "error", message: "Email not found", statusCode: 404 })
+      return
+    } 
+    let adminRecord = {
+      name: admin.name,
+      userName: admin.userName,
+      email: admin.email,
+      mobile: admin.mobile,
+      phone: admin.phone,
+    };
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 });     
+    }
+  }
+};
+
 //Add Admin
 module.exports.addAdmin = async (req, res) => {
   if (!req.body?.name) {
@@ -241,4 +263,69 @@ module.exports.deleteAdmin = async (req, res) => {
 
 };
 
+//get Data
+module.exports.getData = async (req, res) => {
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return
+  } else {
+    const { id } = req.body;
+    const  findAdmin = await AdminList.findById({_id:id});
+    if (!findAdmin) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
+    }
+  
+    res.status(201).json({ status: "success",data:findAdmin, message: "Admin get Successfully", statusCode: 201 })
+    return
+  }
+
+
+};
+
+module.exports.signUp = async (req, res) => {
+  console.log("asd",req.body);
+  if (!req.body?.id) {
+    res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
+    return
+  } else if (!req.body?.name) {
+    res.status(400).json({ status: "error", message: "Name required", statusCode: 400 })
+    return
+  } else if (!req.body?.userName) {
+    res.status(400).json({ status: "error", message: "User Name Required", statusCode: 400 })
+    return
+  }else if (!req.body?.password) {
+    res.status(400).json({ status: "error", message: "User Name Required", statusCode: 400 })
+    return
+  }else {
+    console.log("run");
+    
+    const  findAdmin = await AdminList.findById(req.body?.id);
+    if (!findAdmin) {
+      res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+      return
+    }  
+    console.log("run2");
+    if (findAdmin?.password) {
+      res.status(400).json({ status: "error", message: "Your already have account", statusCode: 400 })
+      return      
+    }
+    const { name, userName,password ,id} = req.body;
+  const encryptedPassword = await bycrypt.hash(password, 10);
+    const Admin = await AdminList.findByIdAndUpdate({_id:id}, {
+      name, userName,  
+      password: encryptedPassword,
+    }, { new: true }
+    )
+   
+    Admin.save((err, data) => {
+      if (err) {
+        res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+        return
+      }
+      res.status(201).json({ status: "success", message: "Account Created Successfully", statusCode: 201 })
+      return
+    });
+  }
+};
 
