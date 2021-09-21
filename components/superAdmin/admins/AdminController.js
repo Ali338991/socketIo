@@ -38,11 +38,33 @@ module.exports.login = async (req, res) => {
 
 
   }
-
-
-
-
 };
+
+module.exports.getActiveUser = async (req, res) => {
+  if (!req.body?.token) {
+    res.status(400).json({ status: "error", message: "token required", statusCode: 400 })
+    return
+  } else {
+    const { token } = req.body;
+    var decoded = await jwt.verify(token, process.env.jwtKey);
+    if (decoded.email) {
+    const admin = await AdminList.findOne({ email: decoded?.email });
+    if (!admin) {
+      res.status(404).json({ status: "error", message: "Email not found", statusCode: 404 })
+      return
+    } 
+    let adminRecord = {
+      name: admin.name,
+      userName: admin.userName,
+      email: admin.email,
+      mobile: admin.mobile,
+      phone: admin.phone,
+    };
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: adminRecord, statusCode: 202 });     
+    }
+  }
+};
+
 //Add Admin
 module.exports.addAdmin = async (req, res) => {
   if (!req.body?.name) {
