@@ -55,7 +55,7 @@ module.exports.getSuccessStories = async (req, res) => {
   try {
     const getSuccessStories = await SuccessStories.find({});
     let newGetSuccessStoryList = []
-    getSuccessStories.map((item) => {
+    getSuccessStories.map((success) => {
       newGetSuccessStoryList.push(
         {
           id: success?._id,
