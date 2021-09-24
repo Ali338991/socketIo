@@ -121,7 +121,30 @@ module.exports.addAdmin = async (req, res) => {
 module.exports.getAdminList = async (req, res) => {
   try {
     const getAdminList = await AdminList.find({role:'admin'});
-    res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data: getAdminList, statusCode: 202 })
+  
+    
+    let newgetAdminList = []
+    getAdminList.map((item)=>{
+     
+      
+      newgetAdminList.push(
+        {  
+          id: item._id , 
+          name: item.name,
+          userName: item.userName,
+          email: item.email,
+          mobile: item.mobile, 
+          status: item.status, 
+          role: item.role, 
+          image: item.image, 
+          cloudinaryId: item.cloudinaryId, 
+          password: item.password
+        }
+      );
+    })
+    
+    
+    res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data: newgetAdminList, statusCode: 202 })
     return
   } catch (error) {
     res.status(400).json({ status: "success", message: { error }, statusCode: 400 })
