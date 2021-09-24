@@ -33,7 +33,14 @@ module.exports.launchCourse = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success",data:success, message: "Course Launched and Send Email to Teacher  Successfully", statusCode: 201 })
+      let data = {
+        id:success?._id,
+        courseName: success?.courseName,
+        instructorName: success?.instructorName,
+        teacherEmail: success?.teacherEmail,
+        status: success?.status,              
+      };
+      res.status(201).json({ status: "success",data:data, message: "Course Launched and Send Email to Teacher  Successfully", statusCode: 201 })
       return
     });
   }
@@ -42,7 +49,19 @@ module.exports.launchCourse = async (req, res) => {
 module.exports.getCoursesList = async (req, res) => {
   try {
     const getCoursesList = await CoursesList.find({});
-    res.status(202).json({ status: "success", message: "Get list of Courses Successfully", data:getCoursesList , statusCode: 202 })
+    let newGetCurseList = []
+    getCoursesList.map((item)=>{      
+      newGetCurseList.push(
+        {  
+        id:success?._id,
+        courseName: success?.courseName,
+        instructorName: success?.instructorName,
+        teacherEmail: success?.teacherEmail,
+        status: success?.status,  
+        }
+      );
+    })
+    res.status(202).json({ status: "success", message: "Get list of Courses Successfully", data:newGetCurseList , statusCode: 202 })
     return
   } catch (error) {
     res.status(400).json({ status: "success", message: err?.message, statusCode: 400 })
@@ -89,11 +108,18 @@ module.exports.doCourseOnline = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    Course.save((err, data) => {
+    Course.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        courseName: success?.courseName,
+        instructorName: success?.instructorName,
+        teacherEmail: success?.teacherEmail,
+        status: success?.status,              
+      };
       res.status(201).json({ status: "success", data: data, message: "Course Online Successfully", statusCode: 201 })
       return
     });
@@ -115,11 +141,18 @@ module.exports.doCourseBlok = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    Course.save((err, data) => {
+    Course.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        courseName: success?.courseName,
+        instructorName: success?.instructorName,
+        teacherEmail: success?.teacherEmail,
+        status: success?.status,              
+      };
       res.status(201).json({ status: "success", data: data, message: "Course Blok Successfully", statusCode: 201 })
       return
     });

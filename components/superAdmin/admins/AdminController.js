@@ -27,15 +27,15 @@ module.exports.login = async (req, res) => {
       process.env.jwtKey
     );
     let data = {
-      id:admin._id,
-      name: admin.name,
-      userName: admin.userName,
-      email: admin.email,
-      mobile: admin.mobile,
-      status:admin.status,
-      cloudinaryId:admin.cloudinaryId,
-      image:admin.image,
-      role:admin.role,
+      id:admin?._id,
+      name: admin?.name,
+      userName: admin?.userName,
+      email: admin?.email,
+      mobile: admin?.mobile,
+      status:admin?.status,
+      cloudinaryId:admin?.cloudinaryId,
+      image:admin?.image,
+      role:admin?.role,
       token,
     };
     res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 })
@@ -58,15 +58,15 @@ module.exports.getActiveUser = async (req, res) => {
       return
     } 
     let data = {
-      id:admin._id,
-      name: admin.name,
-      userName: admin.userName,
-      email: admin.email,
-      mobile: admin.mobile,
-      status:admin.status,
-      cloudinaryId:admin.cloudinaryId,
-      image:admin.image,
-      role:admin.role,
+      id:admin?._id,
+      name: admin?.name,
+      userName: admin?.userName,
+      email: admin?.email,
+      mobile: admin?.mobile,
+      status:admin?.status,
+      cloudinaryId:admin?.cloudinaryId,
+      image:admin?.image,
+      role:admin?.role,
       
     };
     res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 });     
@@ -94,7 +94,8 @@ module.exports.addAdmin = async (req, res) => {
       res.status(400).json({ status: "success", message: "Email already exist", statusCode: 400 })
       return
     }
-    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" });
+    const filename =req.file?.path?await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" }):""
+
     const { name, userName, email, mobile } = req.body;
     const newAdminList = new AdminList({
       name, userName, email, mobile,
@@ -107,11 +108,22 @@ module.exports.addAdmin = async (req, res) => {
     const yourRole = newAdminList?.role
     const portal = process.env.AdminPortal
     await sendEmail(id, portal, email, name, yourRole, res);
-    newAdminList.save((err, data) => {
+    newAdminList.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
+      let data = {
+        id:success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        mobile: success?.mobile,
+        status:success?.status,
+        cloudinaryId:success?.cloudinaryId,
+        image:success?.image,
+        role:success?.role,        
+      };
       res.status(201).json({ status: "success", data: data, message: "Admin Created and Send Email Successfully", statusCode: 201 })
       return
     });
@@ -120,30 +132,23 @@ module.exports.addAdmin = async (req, res) => {
 //Get List of Admin
 module.exports.getAdminList = async (req, res) => {
   try {
-    const getAdminList = await AdminList.find({role:'admin'});
-  
-    
+    const getAdminList = await AdminList.find({role:'admin'});   
     let newgetAdminList = []
-    getAdminList.map((item)=>{
-     
-      
+    getAdminList.map((item)=>{      
       newgetAdminList.push(
         {  
-          id: item._id , 
-          name: item.name,
-          userName: item.userName,
-          email: item.email,
-          mobile: item.mobile, 
-          status: item.status, 
-          role: item.role, 
-          image: item.image, 
-          cloudinaryId: item.cloudinaryId, 
-          password: item.password
+          id: item?._id , 
+          name: item?.name,
+          userName: item?.userName,
+          email: item?.email,
+          mobile: item?.mobile, 
+          status: item?.status, 
+          role: item?.role, 
+          image: item?.image, 
+          cloudinaryId: item?.cloudinaryId, 
         }
       );
-    })
-    
-    
+    })    
     res.status(202).json({ status: "success", message: "Get list of Admin Successfully", data: newgetAdminList, statusCode: 202 })
     return
   } catch (error) {
@@ -282,9 +287,13 @@ module.exports.updateAdmin = async (req, res) => {
     if (!findAdmin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
-    }  
-    await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
-    const filename = await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" });    
+    } 
+    
+    if (findAdmin?.cloudinaryId) {
+    await cloudinary.uploader.destroy(findAdmin.cloudinaryId)      
+    }
+    const filename =req.file?.path?await cloudinary.uploader.upload(req.file?.path,{ folder: "profile/Admin/" }):""
+
     const { name, userName, email, mobile, id } = req.body;
     const Admin = await AdminList.findByIdAndUpdate(id, {
       name, userName, email, mobile,
@@ -379,14 +388,12 @@ module.exports.signUp = async (req, res) => {
     res.status(400).json({ status: "error", message: "User Name Required", statusCode: 400 })
     return
   }else {
-    console.log("run");
     
     const  findAdmin = await AdminList.findById(req.body?.id);
     if (!findAdmin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }  
-    console.log("run2");
     if (findAdmin?.password) {
       res.status(400).json({ status: "error", message: "Your already have account", statusCode: 400 })
       return      

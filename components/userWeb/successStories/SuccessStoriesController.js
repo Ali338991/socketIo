@@ -21,7 +21,7 @@ module.exports.addSuccessStories = async (req, res) => {
       return
     }
     const { name, userName, email, description } = req.body;
-    const filename = await cloudinary.uploader.upload(req.file?.path, { folder: `SuccessStories/${email}/` });
+    const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: `SuccessStories/${email}/` }) : "";
     const newSuccessStories = new SuccessStories({
       name, userName, email, description,
       successStoryImage: filename?.secure_url,
@@ -34,7 +34,17 @@ module.exports.addSuccessStories = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", data: success, message: "SuccessStories Added  Successfully", statusCode: 201 })
+      let data = {
+        id: success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        description: success?.description,
+        status: success?.status,
+        cloudinaryId: success?.cloudinaryId,
+        successStoryImage: success?.successStoryImage,
+      };
+      res.status(201).json({ status: "success", data: data, message: "SuccessStories Added  Successfully", statusCode: 201 })
       return
     });
   }
@@ -44,7 +54,22 @@ module.exports.addSuccessStories = async (req, res) => {
 module.exports.getSuccessStories = async (req, res) => {
   try {
     const getSuccessStories = await SuccessStories.find({});
-    res.status(202).json({ status: "success", message: "Get list  Successfully", data: getSuccessStories, statusCode: 202 })
+    let newGetSuccessStoryList = []
+    getSuccessStories.map((item) => {
+      newGetSuccessStoryList.push(
+        {
+          id: success?._id,
+          name: success?.name,
+          userName: success?.userName,
+          email: success?.email,
+          description: success?.description,
+          status: success?.status,
+          cloudinaryId: success?.cloudinaryId,
+          successStoryImage: success?.successStoryImage,
+        }
+      );
+    })
+    res.status(202).json({ status: "success", message: "Get list  Successfully", data: newGetSuccessStoryList, statusCode: 202 })
     return
   } catch (error) {
     res.status(400).json({ status: "success", message: { error }, statusCode: 400 })
@@ -72,7 +97,17 @@ module.exports.approve = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", data: success, message: "Story Approve Successfully", statusCode: 201 })
+      let data = {
+        id: success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        description: success?.description,
+        status: success?.status,
+        cloudinaryId: success?.cloudinaryId,
+        successStoryImage: success?.successStoryImage,
+      };
+      res.status(201).json({ status: "success", data: data, message: "Story Approve Successfully", statusCode: 201 })
       return
     });
   }
@@ -101,7 +136,17 @@ module.exports.reject = async (req, res) => {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
         return
       }
-      res.status(201).json({ status: "success", data: success, message: "Story rejected Successfully", statusCode: 201 })
+      let data = {
+        id: success?._id,
+        name: success?.name,
+        userName: success?.userName,
+        email: success?.email,
+        description: success?.description,
+        status: success?.status,
+        cloudinaryId: success?.cloudinaryId,
+        successStoryImage: success?.successStoryImage,
+      };
+      res.status(201).json({ status: "success", data: data, message: "Story rejected Successfully", statusCode: 201 })
       return
     });
   }
@@ -129,30 +174,37 @@ module.exports.updateSuccessStories = async (req, res) => {
         res.status(400).json({ status: "error", message: "Description Required", statusCode: 400 })
         return
       } else {
-        const del = await cloudinary.uploader.destroy(check.cloudinaryId);
-        if (del) {
-          const { name, userName, email, description,id } = req.body;
-          const filename = await cloudinary.uploader.upload(req.file?.path, { folder: `SuccessStories/${email}/` });
-          const data = {
-            name, userName, email, description,
-            successStoryImage: filename?.secure_url,
-            cloudinaryId: filename?.public_id,
-            status: "pending"
-          };
-          const newSuccessStories = await SuccessStories.findByIdAndUpdate(id, data, { new: true })
-          newSuccessStories.save((err, success) => {
-            if (err) {
-              res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
-              return
-            }
-            res.status(201).json({ status: "success", data: success, message: "SuccessStories Update Successfully", statusCode: 201 })
-            return
-          });
-        } else {
-          res.status(201).json({ status: "success", data: success, message: "Old image not deleted!try again", statusCode: 201 })
-          return
-
+        if (findAdmin?.cloudinaryId) {
+          await cloudinary.uploader.destroy(check.cloudinaryId);
         }
+        const { name, userName, email, description, id } = req.body;
+        const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: `SuccessStories/${email}/` }) : "";
+        const data = {
+          name, userName, email, description,
+          successStoryImage: filename?.secure_url,
+          cloudinaryId: filename?.public_id,
+          status: "pending"
+        };
+        const newSuccessStories = await SuccessStories.findByIdAndUpdate(id, data, { new: true })
+        newSuccessStories.save((err, success) => {
+          if (err) {
+            res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+            return
+          }
+          let data = {
+            id: success?._id,
+            name: success?.name,
+            userName: success?.userName,
+            email: success?.email,
+            description: success?.description,
+            status: success?.status,
+            cloudinaryId: success?.cloudinaryId,
+            successStoryImage: success?.successStoryImage,
+          };
+          res.status(201).json({ status: "success", data: data, message: "SuccessStories Update Successfully", statusCode: 201 })
+          return
+        });
+
       }
     } else {
       res.status(400).json({ status: "error", message: `story already ${check.status}`, statusCode: 400 })
