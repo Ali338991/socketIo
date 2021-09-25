@@ -230,7 +230,7 @@ module.exports.updateStudent = async (req, res) => {
       return
     }
 
-    if (findAdmin?.cloudinaryId) {
+    if (findStudent?.cloudinaryId) {
       await cloudinary.uploader.destroy(findStudent.cloudinaryId);    
       }
     const filename =req.file?.path?await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Student/" }):"";
@@ -271,15 +271,15 @@ module.exports.deleteStudent = async (req, res) => {
     return
   } else {
     const { id } = req.body;
-    const findStudent = await StudentList.findById({ _id: id });
+    const findStudent = await StudentList.findById(id);
     if (!findStudent) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    if (findAdmin?.cloudinaryId) {
+    if (findStudent?.cloudinaryId) {
       await cloudinary.uploader.destroy(findStudent.cloudinaryId);    
       }
-    const Student = await StudentList.findByIdAndDelete({ _id: id });
+    const Student = await StudentList.findByIdAndDelete(id);
     if (!Student) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
