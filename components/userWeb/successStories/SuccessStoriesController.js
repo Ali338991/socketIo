@@ -66,6 +66,8 @@ module.exports.getSuccessStories = async (req, res) => {
           status: success?.status,
           cloudinaryId: success?.cloudinaryId,
           successStoryImage: success?.successStoryImage,
+        whyReject:success.whyReject,
+
         }
       );
     })
