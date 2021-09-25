@@ -145,6 +145,7 @@ module.exports.reject = async (req, res) => {
         status: success?.status,
         cloudinaryId: success?.cloudinaryId,
         successStoryImage: success?.successStoryImage,
+        whyReject:success.whyReject,
       };
       res.status(201).json({ status: "success", data: data, message: "Story rejected Successfully", statusCode: 201 })
       return
