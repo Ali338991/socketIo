@@ -69,7 +69,7 @@ module.exports.getTeachers = async (req, res) => {
   try {
     const getTeacherList = await teacherObject.find({ role: 'teacher' })
     let newGetTeacherList = []
-    getTeacherList.map((item) => {
+    getTeacherList.map((success) => {
       newGetTeacherList.push(
         {
           id: success?._id,
