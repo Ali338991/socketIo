@@ -50,7 +50,7 @@ module.exports.getCoursesList = async (req, res) => {
   try {
     const getCoursesList = await CoursesList.find({});
     let newGetCurseList = []
-    getCoursesList.map((item)=>{      
+    getCoursesList.map((success)=>{      
       newGetCurseList.push(
         {  
         id:success?._id,
