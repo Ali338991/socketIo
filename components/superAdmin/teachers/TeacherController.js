@@ -231,23 +231,28 @@ module.exports.updateTeacher = async (req, res) => {
     res.status(400).json({ status: "error", message: "address Required", statusCode: 400 })
     return
   } else {
-    const findTeacher = await teacherObject.findById({ _id: req.body?.id });
+ 
+    const findTeacher = await teacherObject.findById(req.body.id);
+
     if (!findTeacher) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
 
-    if (findAdmin?.cloudinaryId) {
+    if (findTeacher?.cloudinaryId) {
       await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
     }
+
     const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Teacher/" }) : "";
     const { name, userName, email, mobile, cnic, address, id } = req.body;
+
     const addTeacherInDb = await teacherObject.findByIdAndUpdate(id, {
       name, userName, email, mobile, cnic, address,
       image: filename?.secure_url,
       cloudinaryId: filename?.public_id,
     }, { new: true }
     )
+
     await addTeacherInDb.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
