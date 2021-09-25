@@ -72,15 +72,17 @@ module.exports.getTeachers = async (req, res) => {
     getTeacherList.map((item) => {
       newGetTeacherList.push(
         {
-          id: item?._id,
-          name: item?.name,
-          userName: item?.userName,
-          email: item?.email,
-          mobile: item?.mobile,
-          status: item?.status,
-          role: item?.role,
-          image: item?.image,
-          cloudinaryId: item?.cloudinaryId,
+          id: success?._id,
+          name: success?.name,
+          userName: success?.userName,
+          email: success?.email,
+          mobile: success?.mobile,
+          cnic: success?.cnic,
+          address: success?.address,
+          status: success?.status,
+          cloudinaryId: success?.cloudinaryId,
+          image: success?.image,
+          role: success?.role,
         }
       );
     })
