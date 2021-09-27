@@ -288,7 +288,9 @@ module.exports.deleteTeacher = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
+    if (findTeacher?.cloudinaryId) {
+      await cloudinary.uploader.destroy(findTeacher.cloudinaryId);  
+      }
     const Teacher = await teacherObject.findByIdAndDelete({ _id: id });
     if (!Teacher) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
