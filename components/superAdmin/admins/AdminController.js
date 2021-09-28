@@ -335,7 +335,10 @@ module.exports.deleteAdmin = async (req, res) => {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
       return
     }
-    await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
+    if (findAdmin?.cloudinaryId) {
+      await cloudinary.uploader.destroy(findAdmin.cloudinaryId);
+
+      }
     const Admin = await AdminList.findByIdAndDelete({ _id: id });
     if (!Admin) {
       res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
