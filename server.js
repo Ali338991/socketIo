@@ -16,6 +16,9 @@ var CoursesRoutes= require("./components/superAdmin/teacher/courses/CoursesRoute
 //userWeb --student
 var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
 
+// Dashboard --routes
+var CountLengthRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
+
 
 
 
@@ -42,6 +45,9 @@ app.use("/superAdmin/students", StudentRoutes);
 app.use("/admins", AdminLoginRoutes);
 //Teacher-api-route
 app.use("/superAdmin/teacher/courses", CoursesRoutes);
+
+
+app.use("/superAdmin/dashboard", CountLengthRoutes);
 
 
 
