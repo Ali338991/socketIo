@@ -24,7 +24,7 @@ router.put('/fullControl', (req,res)=>{
 router.delete('/deleteTeacher', (req,res)=>{   
     deleteTeacher(req,res)
 })
-router.put('/updateTeacher',uploadImage,(req,res)=>{   
+router.put('/updateTeacher',(req,res)=>{   
     updateTeacher(req,res)
 })
 module.exports = router;
