@@ -73,7 +73,7 @@ module.exports.getTotalCourses = async (req, res) => {
 // get total pending success stories
 module.exports.getPendingStories = async (req, res) => {
   try {
-    const getPendingStories = await successStories.find({ status: "reject" });
+    const getPendingStories = await successStories.find({ status: "pending" });
 
     res
       .status(202)

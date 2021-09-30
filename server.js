@@ -15,13 +15,10 @@ var AdminLoginRoutes= require("./components/superAdmin/admins/AdminLoginRoute")
 var CoursesRoutes= require("./components/superAdmin/teacher/courses/CoursesRoutes")
 //userWeb --student
 var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
+
 // Dashboard --routes
-var TotalStudentsRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
-var TotalTeachersRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
-var TotalCoursesRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
-var PendingStoriesRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
-var TSuccessStoriesRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
-var TotalAdminsRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
+var CountLengthRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
+
 
 
 
@@ -49,13 +46,8 @@ app.use("/admins", AdminLoginRoutes);
 //Teacher-api-route
 app.use("/superAdmin/teacher/courses", CoursesRoutes);
 
-// Dashboard --router
-app.use("/superAdmin/dashboard", TotalStudentsRoutes);
-app.use("/superAdmin/dashboard", TotalTeachersRoutes);
-app.use("/superAdmin/dashboard", TotalCoursesRoutes);
-app.use("/superAdmin/dashboard", PendingStoriesRoutes);
-app.use("/superAdmin/dashboard", TSuccessStoriesRoutes);
-app.use("/superAdmin/dashboard", TotalAdminsRoutes);
+
+app.use("/superAdmin/dashboard", CountLengthRoutes);
 
 
 
