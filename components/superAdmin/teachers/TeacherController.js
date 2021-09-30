@@ -101,7 +101,7 @@ module.exports.temporaryBlock = async (req, res) => {
   } else {
     const { id } = req.body;
     const Teacher = await teacherObject.findByIdAndUpdate(id, {
-      status: "temporaryBlock",
+      status: "temporaryBlok",
     }, { new: true }
     )
     if (!Teacher) {
@@ -126,7 +126,7 @@ module.exports.temporaryBlock = async (req, res) => {
         image: success?.image,
         role: success?.role,
       };
-      res.status(201).json({ status: "success", data: data, message: "Teacher temporary block Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success", data: data, message: "Teacher temporary blok Successfully", statusCode: 201 })
       return
     });
   }
@@ -139,7 +139,7 @@ module.exports.permanentBlock = async (req, res) => {
   } else {
     const { id } = req.body;
     const Teacher = await teacherObject.findByIdAndUpdate(id, {
-      status: "permanentBlock",
+      status: "permanentBlok",
     }, { new: true }
     )
     if (!Teacher) {
@@ -164,7 +164,7 @@ module.exports.permanentBlock = async (req, res) => {
         image: success?.image,
         role: success?.role,
       };
-      res.status(201).json({ status: "success", data: data, message: "Teacher permanent block Successfully", statusCode: 201 })
+      res.status(201).json({ status: "success", data: data, message: "Teacher permanent blok Successfully", statusCode: 201 })
       return
     });
   }
@@ -239,9 +239,9 @@ module.exports.updateTeacher = async (req, res) => {
       return
     }
 
-//     if (findTeacher?.cloudinaryId) {
-//       await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
-//     }
+    if (findTeacher?.cloudinaryId) {
+      await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
+    }
 
     const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Teacher/" }) : "";
     const { name, userName, email, mobile, cnic, address, id } = req.body;
