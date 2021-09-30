@@ -239,17 +239,23 @@ module.exports.updateTeacher = async (req, res) => {
       return
     }
 
-//     if (findTeacher?.cloudinaryId) {
-//       await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
-//     }
+    if (findTeacher?.cloudinaryId) {
+      await cloudinary.uploader.destroy(findTeacher.cloudinaryId);
+    }
 
     const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Teacher/" }) : "";
     const { name, userName, email, mobile, cnic, address, id } = req.body;
 
+    if(filename === '') {
+      image = findTeacher.image;
+      cloudinaryId = findTeacher.cloudinaryId;
+    } else if(filename !== '') {
+      image = filename?.secure_url;
+      cloudinaryId = filename?.public_id;
+    }
+
     const addTeacherInDb = await teacherObject.findByIdAndUpdate(id, {
-      name, userName, email, mobile, cnic, address,
-      image: filename?.secure_url,
-      cloudinaryId: filename?.public_id,
+      name, userName, email, mobile, cnic, address, image, cloudinaryId,
     }, { new: true }
     )
 
@@ -300,4 +306,3 @@ module.exports.deleteTeacher = async (req, res) => {
     return
   }
 };
-
