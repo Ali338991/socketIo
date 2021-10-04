@@ -36,9 +36,10 @@ module.exports.login = async (req, res) => {
       cloudinaryId:admin?.cloudinaryId,
       image:admin?.image,
       role:admin?.role,
+      assignCourse:admin?.assignCourse,
       token,
     };
-    res.status(202).json({ status: "success", message: "Admin get successfully", data: admin, statusCode: 202 })
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 })
 
 
   }
