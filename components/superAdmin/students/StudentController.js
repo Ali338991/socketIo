@@ -56,6 +56,7 @@ module.exports.addStudent = async (req, res) => {
         image: success?.image,
         role: success?.role,
       };
+      
       res.status(201).json({ status: "success", data: data, message: "Student Created and Send Email Successfully", statusCode: 201 })
       return
     });

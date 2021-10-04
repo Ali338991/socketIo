@@ -34,15 +34,15 @@ var StudentSchema = mongoose.Schema({
   },
   status:{
     type: String,
-      required:true
+      
   }, 
   course:{
     type: String,
-      required:true
+      
   }, 
   role:{
     type: String,
-      required:true
+      
   },
   cloudinaryId:{
     type: String,
