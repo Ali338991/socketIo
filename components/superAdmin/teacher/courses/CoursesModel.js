@@ -1,30 +1,29 @@
 var mongoose = require("mongoose")
-var CoursesSchema = mongoose.Schema({ 
-  instructorName:{
+var CoursesSchema = mongoose.Schema({
+  // _id: mongoose.Schema.Types.String,
+  instructorName: {
     type: String,
-      required:true
-  },  
-  courseName:{
+    required: true
+  },
+  courseName: {
     type: String,
-      required:true
-  },  
-  status:{
+    required: true
+  },
+  status: {
     type: String,
-    required:true
-  },  
+    required: true
+  },
+  video: { type: String, "default": ""},
   teacherEmail: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    validate: {
-    validator: function(v) {
-    return /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(v);
-    },
-    message: "Please enter a valid email"
-    },
+    type: String,  
     required: [true, "Email required"]
-    }
+  },
+  teacherId:{
+    type: String,
+  },
+  image: {
+    type: String,
+  },
 })
 
 

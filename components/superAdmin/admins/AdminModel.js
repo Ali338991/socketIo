@@ -1,32 +1,32 @@
 var mongoose = require("mongoose")
-var AdminSchema = mongoose.Schema({ 
-  name:{
+var AdminSchema = mongoose.Schema({
+  name: {
     type: String,
-      required:true
-  }, 
-  userName:{
+    required: true
+  },
+  userName: {
     type: String,
-      required:true
-  }, 
-   password:{
-    type: String,
-  },  
-  image:{
+    required: true
+  },
+  password: {
     type: String,
   },
-  mobile:{
+  image: {
+    type: String,
+  },
+  mobile: {
     type: Number,
-      required:true
+    required: true
   },
-  status:{
+  status: {
     type: String,
-      required:true
-  }, 
-  role:{
-    type: String,
-      required:true
+    required: true
   },
-  cloudinaryId:{
+  role: {
+    type: String,
+    required: true
+  },
+  cloudinaryId: {
     type: String,
   },
   email: {
@@ -35,20 +35,28 @@ var AdminSchema = mongoose.Schema({
     lowercase: true,
     unique: true,
     validate: {
-    validator: function(v) {
-    return /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(v);
-    },
-    message: "Please enter a valid email"
+      validator: function (v) {
+        return /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(v);
+      },
+      message: "Please enter a valid email"
     },
     required: [true, "Email required"]
-    },
-    cnic:{
-      type: String,
   },
-  address:{
+  cnic: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+
+  assignCourse: {
+    type: mongoose.Schema.Types.Array, "default": [],
+    items: {
       type: String,
-  }
- 
+    },
+    ref: 'Courses'
+  },
+
 })
 
 

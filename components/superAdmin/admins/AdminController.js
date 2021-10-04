@@ -14,7 +14,7 @@ module.exports.login = async (req, res) => {
     return
   } else {
     const { email, password } = req.body;
-    const admin = await AdminList.findOne({ email: email });
+    const admin = await AdminList.findOne({ email: email }).populate('assignCourse','courseName')
     if (!admin) {
       res.status(400).json({ status: "error", message: "Email not found", statusCode: 400 })
       return
@@ -38,7 +38,7 @@ module.exports.login = async (req, res) => {
       role:admin?.role,
       token,
     };
-    res.status(202).json({ status: "success", message: "Admin get successfully", data: data, statusCode: 202 })
+    res.status(202).json({ status: "success", message: "Admin get successfully", data: admin, statusCode: 202 })
 
 
   }
