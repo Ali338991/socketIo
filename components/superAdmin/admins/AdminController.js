@@ -376,7 +376,7 @@ module.exports.getData = async (req, res) => {
 
 
 };
-
+// signup 
 module.exports.signUp = async (req, res) => {
   console.log("asd",req.body);
   if (!req.body?.id) {
