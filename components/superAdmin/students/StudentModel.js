@@ -46,6 +46,12 @@ var StudentSchema = mongoose.Schema({
   },
   cloudinaryId:{
     type: String,
+  },
+  isVerify:{
+    type: Boolean,
+  },
+  code:{
+    type: String
   }
  
  
