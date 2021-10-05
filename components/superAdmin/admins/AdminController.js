@@ -296,12 +296,21 @@ module.exports.updateAdmin = async (req, res) => {
     const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Admin/" }) : ""
 
     const { name, userName, email, mobile, id } = req.body;
+
+    /* Logic - Image Issue Resolved while Update */
+    if(filename === '') {
+      image = findAdmin.image;
+      cloudinaryId = findAdmin.cloudinaryId;
+    } else if(filename !== '') {
+      image = filename?.secure_url;
+      cloudinaryId = filename?.public_id;
+    }
+
     const Admin = await AdminList.findByIdAndUpdate(id, {
-      name, userName, email, mobile,
-      image: filename?.secure_url,
-      cloudinaryId: filename?.public_id,
+      name, userName, email, mobile, image, cloudinaryId,
     }, { new: true }
     )
+    /* End of Logic - Image Issue Resolved while Update */
 
     Admin.save((err, success) => {
       if (err) {

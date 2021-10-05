@@ -56,7 +56,6 @@ module.exports.addStudent = async (req, res) => {
         image: success?.image,
         role: success?.role,
       };
-      
       res.status(201).json({ status: "success", data: data, message: "Student Created and Send Email Successfully", statusCode: 201 })
       return
     });
@@ -236,12 +235,21 @@ module.exports.updateStudent = async (req, res) => {
       }
     const filename =req.file?.path?await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Student/" }):"";
     const { name, userName, email, mobile, id, course } = req.body;
+
+    /* Logic - Image Issue Resolved while Update */
+    if(filename === '') {
+      image = findStudent.image;
+      cloudinaryId = findStudent.cloudinaryId;
+    } else if(filename !== '') {
+      image = filename?.secure_url;
+      cloudinaryId = filename?.public_id;
+    }
+
     const Student = await StudentList.findByIdAndUpdate(id, {
-      name, userName, email, mobile, course,
-      image: filename?.secure_url,
-      cloudinaryId: filename?.public_id,
+      name, userName, email, mobile, course, image, cloudinaryId,
     }, { new: true }
     )
+    /* End of Logic - Image Issue Resolved while Update */
 
     Student.save((err, success) => {
       if (err) {
