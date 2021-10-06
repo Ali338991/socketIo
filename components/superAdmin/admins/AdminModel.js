@@ -33,7 +33,7 @@ var AdminSchema = mongoose.Schema({
     type: String,
     trim: true,
     lowercase: true,
-    unique: true,
+    // unique: true,
     validate: {
       validator: function (v) {
         return /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(v);
@@ -50,12 +50,13 @@ var AdminSchema = mongoose.Schema({
   },
 
   assignCourse: {
-    type: mongoose.Schema.Types.Array, "default": [],
+    type: mongoose.Schema.Types.Array,
     items: {
       type: String,
     },
     ref: 'Courses'
   },
+  lecture:{type: mongoose.Schema.Types.Array,  "default" : [] },
 
 })
 
