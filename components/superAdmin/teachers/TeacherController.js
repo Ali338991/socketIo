@@ -246,6 +246,7 @@ module.exports.updateTeacher = async (req, res) => {
     const filename = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, { folder: "profile/Teacher/" }) : "";
     const { name, userName, email, mobile, cnic, address, id } = req.body;
 
+    /* Logic - Image Issue Resolved while Update */
     if(filename === '') {
       image = findTeacher.image;
       cloudinaryId = findTeacher.cloudinaryId;
@@ -258,6 +259,7 @@ module.exports.updateTeacher = async (req, res) => {
       name, userName, email, mobile, cnic, address, image, cloudinaryId,
     }, { new: true }
     )
+    /* End of Logic - Image Issue Resolved while Update */
 
     await addTeacherInDb.save((err, success) => {
       if (err) {

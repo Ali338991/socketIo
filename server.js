@@ -11,11 +11,16 @@ const port = process.env.PORT || 5000;
  var teacherRoutes=require('./components/superAdmin/teachers/TeacherRoutes');
  var StudentRoutes = require("./components/superAdmin/students/StudentRoutes");
 var AdminLoginRoutes= require("./components/superAdmin/admins/AdminLoginRoute")
+
+
 //Teacher-api-route
 var CoursesRoutes= require("./components/superAdmin/teacher/courses/CoursesRoutes")
 var LectureRoutes= require("./components/superAdmin/teacher/lectures/LectureRoutes")
+
+
 //userWeb --student
 var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
+var UserAuthRoutes = require("./components/userWeb/auth/AuthRoutes")
 
 // Dashboard --routes
 var CountLengthRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
@@ -57,7 +62,7 @@ app.use("/superAdmin/teacher/lectures", LectureRoutes);
 
 //userWeb --student
 app.use("/userWeb/SuccessStories", SuccessStoriesRoutes);
-
+app.use("/userWeb", UserAuthRoutes);
 
 
 

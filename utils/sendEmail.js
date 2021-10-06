@@ -90,3 +90,47 @@ module.exports.launchCourse = async (portal,email,course,res) => {
 
 
 }
+module.exports.VerifyUser = async (verifyName, verifyEmail,verfiyCode , portal, res) => {
+  try {
+
+    const recipients = [new Recipient(verifyEmail)];
+
+    const variables = [
+      {
+        email: verifyEmail,
+        substitutions: [
+          {
+            var: "Name",
+            value: verifyName,
+          },
+          {
+            var: "Code",
+            value: verfiyCode,
+          },
+          {
+            var: "portalLink",
+            value: portal,
+          },
+        ],
+      },
+    ];
+
+    const emailParams = new EmailParams()
+      .setFrom("info@trainings.techloset.com")
+      .setFromName("trainings.techloset")
+      .setRecipients(recipients)
+      .setSubject("Verify SignUp User")
+      .setTemplateId('z86org8mdzlew137')
+      .setVariables(variables);
+      // await mailersend.send(emailParams);
+
+
+      
+  } catch (error) {
+    res.status(400).json({ status: "error", message:  error.message , statusCode: 400 })
+    return
+
+  }
+
+
+}
