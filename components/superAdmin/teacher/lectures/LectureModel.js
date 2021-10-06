@@ -17,6 +17,8 @@ var LectureSchema = mongoose.Schema({
           items:{ 
             type: Object,
             lectureIndex :{type: String} , 
+            lectureTitle :{type: String} , 
+            lectureDescription :{type: String} , 
             lectureLink :{type: String}  
            
           },
