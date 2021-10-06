@@ -13,16 +13,34 @@ var CoursesSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  video: { type: String, "default": ""},
+
   teacherEmail: {
     type: String,  
-    required: [true, "Email required"]
+    required: [true, "Email required"]    
   },
   teacherId:{
     type: String,
   },
   image: {
     type: String,
+  },
+  cover: {
+    type: String,
+  },
+  intro: {
+    type: String,
+  },
+  courseBrief:{
+    type: String,
+
+  },
+  coverCloudinaryId: {
+    type: String,
+  },
+
+  courseData: {
+    type: mongoose.Schema.Types.String,
+    ref: 'lectures'
   },
 })
 

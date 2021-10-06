@@ -1,6 +1,7 @@
 var CoursesList = require("./CoursesModel");
 let { launchCourse } = require('../../../../utils/sendEmail');
 var AdminList = require("../../admins/AdminModel");
+const cloudinary  = require('../../../../config/Cloudinary');
 
 //Add Courses
 module.exports.launchCourse = async (req, res) => {
@@ -107,7 +108,7 @@ module.exports.deleteCourses = async (req, res) => {
 
 };
 //doCourseOnline
-module.exports.doCourseOnline = async (req, res) => {
+module.exports.doCoursePublish = async (req, res) => {
   if (!req.body?.id) {
     res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
     return
@@ -140,7 +141,7 @@ module.exports.doCourseOnline = async (req, res) => {
   }
 };
 //doCourseBlok
-module.exports.doCourseBlok = async (req, res) => {
+module.exports.doCourseUnPublish = async (req, res) => {
   if (!req.body?.id) {
     res.status(400).json({ status: "error", message: "id required", statusCode: 400 })
     return
@@ -170,5 +171,50 @@ module.exports.doCourseBlok = async (req, res) => {
       return
     });
 
+  }
+};
+module.exports.courseSetup = async (req, res) => {
+  try {
+    if (!req.body?.id) {
+      res.status(400).json({ status: "error", message: "Course id required", statusCode: 400 })
+      return
+    }else if(!req.body?.courseBrief){
+      res.status(400).json({ status: "error", message: "Course Detail Description Required", statusCode: 400 })
+      return
+    }else if(!req.body?.intro){
+      res.status(400).json({ status: "error", message: "Course Intro Video Url Required", statusCode: 400 })
+      return
+    }else{
+      const { intro,courseBrief,id} = req.body;     
+      const course = await CoursesList.findById(id);
+      if (course?.cloudinaryId) {
+        await cloudinary.uploader.destroy(course.coverCloudinaryId)      
+      }
+    const cover =req.file?.path?await cloudinary.uploader.upload(req.file?.path,{ folder: `courses/${course.courseName}/`}):""
+        const Course = await CoursesList.findByIdAndUpdate(id, {
+          courseBrief,
+          intro:intro,
+          cover:cover.secure_url,
+          }, { new: true }
+        )
+        if (!Course) {
+          res.status(400).json({ status: "error", message: "Your id is incorrect", statusCode: 400 })
+          return
+        }
+        Course.save((err, success) => {
+          if (err) {
+            res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
+            return
+          }     
+          res.status(201).json({ status: "success", data: success, message: "Course Setup Done Successfully", statusCode: 201 })
+          return
+        });
+    
+      }
+    
+  } catch (error) {
+    res.status(400).json({ status: "error", message: error?.message, statusCode: 400 })
+return
+    
   }
 };
