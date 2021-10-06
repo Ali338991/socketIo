@@ -23,6 +23,7 @@ module.exports.createNewWeek = async (req, res) => {
         { $push: { lecture: { week: week, lectureList: [] } } },
         { new: true }
       )
+      
       res.status(201).json({ status: "success", data: weekCreated, message: `Week ${week} Create Successfully`, statusCode: 201 })
     }
   }
