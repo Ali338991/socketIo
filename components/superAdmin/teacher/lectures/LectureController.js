@@ -68,7 +68,7 @@ module.exports.uploadLecture = async (req, res) => {
         }
       },
       { new: true }
-    )
+    ).populate('courseId')
     res.status(201).json({ status: "success", data: lectureData, message: `Lecture Added Successfully`, statusCode: 201 })
     }else{
       res.status(400).json({ status: "error", message: `Week Not Exist! Plz Add week`, statusCode: 400 })

@@ -56,7 +56,6 @@ var AdminSchema = mongoose.Schema({
     },
     ref: 'Courses'
   },
-  lecture:{type: mongoose.Schema.Types.Array,  "default" : [] },
 
 })
 

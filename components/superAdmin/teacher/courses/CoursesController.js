@@ -1,6 +1,7 @@
 var CoursesList = require("./CoursesModel");
 let { launchCourse } = require('../../../../utils/sendEmail');
 var AdminList = require("../../admins/AdminModel");
+var lectureCollection = require("../lectures/LectureModel");
 const cloudinary  = require('../../../../config/Cloudinary');
 
 //Add Courses
@@ -39,6 +40,23 @@ module.exports.launchCourse = async (req, res) => {
     }, { new: true }
     )
     //End
+    //Add Default array of lecture
+    const newLecture = new lectureCollection({
+      courseId:newCoursesList._id,
+      lecture:[{
+        week:"1",
+        lectureList:[]
+      }]
+     
+    });
+    newLecture.save((err,check)=>{
+      if (err) {
+        console.log("err",err);       
+      }
+
+    })
+    //Add Default array of lecture
+
     newCoursesList.save((err, success) => {
       if (err) {
         res.status(400).json({ status: "error", message: err?.message, statusCode: 400 })
