@@ -14,3 +14,20 @@ const upload = multer({
 });
 
 module.exports.uploadImage=upload.single("photo");
+
+const fileUpload = multer({
+  storage: multer.diskStorage({}),
+  fileFilter: (req, file, cb) => {
+    let ext = path.extname(file.originalname);
+      if (ext !== ".pdf" && ext !== ".docx" && ext !== ".ppt" && ext !== ".doc" && ext !== ".txt") {
+      cb(new Error("File type is not supported"), false);
+      return;
+    }
+    cb(null, true);
+  },
+});
+
+
+
+
+module.exports.uploadFile=fileUpload.single("file");
