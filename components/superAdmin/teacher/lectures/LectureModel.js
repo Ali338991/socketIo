@@ -23,6 +23,32 @@ var LectureSchema = mongoose.Schema({
            
           },
         },
+        assignmentList: {
+          type: mongoose.Schema.Types.Array,
+          items:{ 
+            type: Object,
+            assignmentIndex :{type: String} , 
+            assignmentTitle :{type: String} , 
+            assignmentDescription :{type: String} , 
+            assignmentFile :{type: String}  ,
+            assignmentCloudinaryId :{type: String}  
+
+           
+          },
+        },
+        notesList: {
+          type: mongoose.Schema.Types.Array,
+          items:{ 
+            type: Object,
+            notesIndex :{type: String} , 
+            notesTitle :{type: String} , 
+            notesDescription :{type: String} , 
+            notesFile :{type: String} , 
+            notesCloudinaryId :{type: String}  
+            
+           
+          },
+        },
     },  
   },
   lectureIndex:{

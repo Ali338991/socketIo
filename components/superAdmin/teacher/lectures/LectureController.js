@@ -1,7 +1,7 @@
 var lectureCollection = require("./LectureModel");
 // let { launchCourse } = require('../../../../utils/sendEmail');
 // var AdminList = require("../../admins/AdminModel");
-// const cloudinary = require('../../../../config/Cloudinary');
+const cloudinary = require('../../../../config/Cloudinary');
 
 //New Week
 module.exports.createNewWeek = async (req, res) => {
@@ -85,5 +85,107 @@ module.exports.getDataOfCourse = async (req, res) => {
   } catch (error) {
     res.status(400).json({ status: "success", message: err?.message, statusCode: 400 })
     return
+  }
+};
+
+//  uploadnotes
+module.exports.uploadnotes = async (req, res) => {
+  if (!req.body?.courseId) {
+    res.status(400).json({ status: "error", message: "courseId required", statusCode: 400 })
+    return
+  } else if (!req.body?.week) {
+    res.status(400).json({ status: "error", message: "week Number Required", statusCode: 400 })
+    return
+  } else if (!req.body?.notesIndex) {
+    res.status(400).json({ status: "error", message: "notesIndex Required", statusCode: 400 })
+    return
+  }else if (!req.body?.notesTitle) {
+    res.status(400).json({ status: "error", message: "notesTitle Required", statusCode: 400 })
+    return
+  }else if (!req.body?.notesDescription) {
+    res.status(400).json({ status: "error", message: "notesDescription Required", statusCode: 400 })
+    return
+  } else {
+    const checkExistingWeek = await lectureCollection.findOne({ courseId: req.body.courseId, "lecture.week": req.body.week })
+    if (!checkExistingWeek) {
+      res.status(400).json({ status: "error", message: `Week Not Exist! Plz Add week`, statusCode: 400 })
+      return
+    }
+    const notesFile = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, {resource_type: "auto" ,folder: `LectureData/week${req.body.week}/notes/` }) : ""
+
+    const { week, courseId, notesIndex,notesTitle,notesDescription} = req.body;
+    //Check week exist or not
+    if (checkExistingWeek) {   
+    const notesData = await lectureCollection.findOneAndUpdate(
+      { courseId:courseId, "lecture.week": week },
+      {
+        $push: {
+          'lecture.$.notesList': {
+            $each: [{ 
+              notesIndex:notesIndex,
+              notesTitle:notesTitle,
+              notesDescription:notesDescription,
+              notesFile:notesFile.secure_url,          
+              notescloudinaryId:notesFile.public_id            
+            }],
+            $position: 1
+          }
+        }
+      },
+      { new: true }
+    ).populate('courseId')
+    res.status(201).json({ status: "success", data: notesData, message: `Notes Added Successfully`, statusCode: 201 })
+    }
+  }
+};
+
+//  uploadassignment
+module.exports.uploadassignment = async (req, res) => {
+  if (!req.body?.courseId) {
+    res.status(400).json({ status: "error", message: "courseId required", statusCode: 400 })
+    return
+  } else if (!req.body?.week) {
+    res.status(400).json({ status: "error", message: "week Number Required", statusCode: 400 })
+    return
+  } else if (!req.body?. assignmentIndex) {
+    res.status(400).json({ status: "error", message: " assignmentIndex Required", statusCode: 400 })
+    return
+  }else if (!req.body?. assignmentTitle) {
+    res.status(400).json({ status: "error", message: " assignmentTitle Required", statusCode: 400 })
+    return
+  }else if (!req.body?. assignmentDescription) {
+    res.status(400).json({ status: "error", message: " assignmentDescription Required", statusCode: 400 })
+    return
+  } else {
+    const checkExistingWeek = await lectureCollection.findOne({ courseId: req.body.courseId, "lecture.week": req.body.week })
+    if (!checkExistingWeek) {
+      res.status(400).json({ status: "error", message: `Week Not Exist! Plz Add week`, statusCode: 400 })
+      return
+    }
+    const  assignmentFile = req.file?.path ? await cloudinary.uploader.upload(req.file?.path, {resource_type: "auto" ,folder: `LectureData/week${req.body.week}/ assignment/` }) : ""
+
+    const { week, courseId, assignmentIndex,assignmentTitle,assignmentDescription} = req.body;
+    //Check week exist or not
+    if (checkExistingWeek) {   
+    const assignmentData = await lectureCollection.findOneAndUpdate(
+      { courseId:courseId, "lecture.week": week },
+      {
+        $push: {
+          'lecture.$.assignmentList': {
+            $each: [{ 
+              assignmentIndex:assignmentIndex,
+              assignmentTitle:assignmentTitle,
+              assignmentDescription:assignmentDescription,
+              assignmentFile:assignmentFile.secure_url,          
+              assignmentcloudinaryId:assignmentFile.public_id            
+            }],
+            $position: 1
+          }
+        }
+      },
+      { new: true }
+    ).populate('courseId')
+    res.status(201).json({ status: "success", data: assignmentData, message: `Assignment Added Successfully`, statusCode: 201 })
+    }
   }
 };
