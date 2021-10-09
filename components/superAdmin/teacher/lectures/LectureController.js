@@ -189,3 +189,50 @@ module.exports.uploadassignment = async (req, res) => {
     }
   }
 };
+
+//  uploadQuiz
+module.exports.uploadQuiz = async (req, res) => {
+  if (!req.body?.courseId) {
+    res.status(400).json({ status: "error", message: "courseId required", statusCode: 400 })
+    return
+  } else if (!req.body?.week) {
+    res.status(400).json({ status: "error", message: "week Number Required", statusCode: 400 })
+    return
+  } else if (!req.body?.weeklyQuiz.question) {
+    res.status(400).json({ status: "error", message: " Question Required", statusCode: 400 })
+    return
+  }else if (!req.body?.weeklyQuiz.answer) {
+    res.status(400).json({ status: "error", message: " Correct Answer  Required", statusCode: 400 })
+    return
+  }else if (!req.body?.weeklyQuiz.choices) {
+    res.status(400).json({ status: "error", message: " Plz Add choices in Array format", statusCode: 400 })
+      return         
+  }else if (req.body?.weeklyQuiz.choices.length < 2) {
+    res.status(400).json({ status: "error", message: " At least two Choices Required Required", statusCode: 400 })
+    return      
+  }
+ else {    
+    const checkExistingWeek = await lectureCollection.findOne({ courseId: req.body.courseId, "lecture.week": req.body.week })
+    if (!checkExistingWeek) {
+      res.status(400).json({ status: "error", message: `Week Not Exist! Plz Add week`, statusCode: 400 })
+      return
+    }
+    const { week, courseId,weeklyQuiz} = req.body;    
+  //Check week exist or not
+    if (checkExistingWeek) {   
+    const weeklyQuizData = await lectureCollection.findOneAndUpdate(
+      { courseId:courseId, "lecture.week": week },
+      {
+        $push: {
+          'lecture.$.weeklyQuiz': {
+            $each: [{weeklyQuiz}],
+            $position: 1
+          }
+        }
+      },
+      { new: true }
+    ).populate('courseId')
+    res.status(201).json({ status: "success", data: weeklyQuizData, message: `Assignment Added Successfully`, statusCode: 201 })
+    }
+  }
+};

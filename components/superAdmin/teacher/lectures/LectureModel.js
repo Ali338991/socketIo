@@ -44,9 +44,16 @@ var LectureSchema = mongoose.Schema({
             notesTitle :{type: String} , 
             notesDescription :{type: String} , 
             notesFile :{type: String} , 
-            notesCloudinaryId :{type: String}  
-            
-           
+            notesCloudinaryId :{type: String}             
+          },
+        },
+        weeklyQuiz: {
+          type: mongoose.Schema.Types.Array,
+          items:{ 
+            type: Object,
+            question :{type: String} , 
+            choices :[{type: String}] , 
+            answer :{type: String}              
           },
         },
     },  

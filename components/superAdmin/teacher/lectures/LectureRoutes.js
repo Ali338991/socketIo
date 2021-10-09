@@ -1,7 +1,7 @@
 var express = require("express")
 var router = express.Router();
 
-let {uploadLecture,getDataOfCourse,createNewWeek,uploadassignment,uploadnotes} = require('./LectureController')
+let {uploadLecture,getDataOfCourse,createNewWeek,uploadassignment,uploadnotes,uploadQuiz} = require('./LectureController')
 let {uploadFile} = require('../../../../config/Multer')
 
 router.put('/createNewWeek', (req,res)=>{   
@@ -20,7 +20,9 @@ router.put('/uploadnotes', uploadFile,(req,res)=>{
     uploadnotes(req,res)
 })
 
-
+router.put('/uploadQuiz', (req,res)=>{   
+    uploadQuiz(req,res)
+})
 
 
 
