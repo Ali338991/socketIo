@@ -217,6 +217,7 @@ module.exports.uploadQuiz = async (req, res) => {
       res.status(400).json({ status: "error", message: `Week Not Exist! Plz Add week`, statusCode: 400 })
       return
     }
+    
     const { week, courseId,weeklyQuiz} = req.body;    
   //Check week exist or not
     if (checkExistingWeek) {   
