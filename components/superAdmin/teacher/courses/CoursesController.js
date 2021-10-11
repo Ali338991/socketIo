@@ -15,7 +15,20 @@ module.exports.launchCourse = async (req, res) => {
   } else if (!req.body?.teacherEmail) {
     res.status(400).json({ status: "error", message: "Teacher Email Required", statusCode: 400 })
     return
-  } else {
+  } else if (!req.body?.courseInfo) {
+    res.status(400).json({ status: "error", message: "courseInfo Required", statusCode: 400 })
+    return       
+  } else if (!req.body?.courseInfo.courseStatus) {
+    res.status(400).json({ status: "error", message: "courseStatus Required", statusCode: 400 })
+    return       
+  }else {
+     if (req.body?.courseInfo.courseStatus == 'paid') {
+      if (!req.body?.courseInfo.price) {
+        res.status(400).json({ status: "error", message: "Course Price Required", statusCode: 400 })
+        return       
+      }    
+    }
+    console.log("r");
     const check = await CoursesList.findOne({ courseName: req.body?.courseName });
     if (check) {
       res.status(400).json({ status: "success", message: "course already exist", statusCode: 400 })
@@ -24,11 +37,12 @@ module.exports.launchCourse = async (req, res) => {
     const teacher = await AdminList.findOne({ email: req.body?.teacherEmail })
 
     // Save new Course into DataBase
-    const { courseName, instructorName, teacherEmail } = req.body;
+    const { courseName, instructorName, teacherEmail,courseInfo } = req.body;
     const newCoursesList = new CoursesList({
       courseName, instructorName, teacherEmail,
       status: 'unPublish',
-      image:teacher?.image
+      image:teacher?.image,
+      courseInfo:courseInfo,
     });
     const email = newCoursesList?.teacherEmail
     const course = newCoursesList?.courseName

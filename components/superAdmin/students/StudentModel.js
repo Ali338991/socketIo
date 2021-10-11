@@ -1,6 +1,5 @@
 var mongoose = require("mongoose")
-var StudentSchema = mongoose.Schema({
- 
+var StudentSchema = mongoose.Schema({ 
   name:{
     type: String,
       required:true
@@ -52,7 +51,15 @@ var StudentSchema = mongoose.Schema({
   },
   code:{
     type: String
-  }
+  },
+  enrolledCourse: {
+    type: mongoose.Schema.Types.Array,
+    items: {
+      type: String,
+    },
+    ref: 'Courses'
+  },
+
  
  
 })

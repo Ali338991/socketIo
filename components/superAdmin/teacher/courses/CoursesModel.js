@@ -32,7 +32,6 @@ var CoursesSchema = mongoose.Schema({
   },
   courseBrief:{
     type: String,
-
   },
   coverCloudinaryId: {
     type: String,
@@ -42,6 +41,11 @@ var CoursesSchema = mongoose.Schema({
     type: mongoose.Schema.Types.String,
     ref: 'lectures'
   },
+  courseInfo:{
+    type: Object,
+    courseStatus: {type:String},
+    price: {type:String},   
+  }
 })
 
 

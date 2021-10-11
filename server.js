@@ -21,6 +21,8 @@ var LectureRoutes= require("./components/superAdmin/teacher/lectures/LectureRout
 //userWeb --student
 var SuccessStoriesRoutes = require("./components/userWeb/successStories/SuccessStoriesRoutes");
 var UserAuthRoutes = require("./components/userWeb/auth/AuthRoutes")
+var WishList = require("./components/userWeb/wishList/WishListRoutes")
+var UserCourse = require("./components/userWeb/userCourse/UserCourseRoutes")
 
 // Dashboard --routes
 var CountLengthRoutes = require("./components/superAdmin/dashboard/DashboardRoutes")
@@ -63,6 +65,8 @@ app.use("/superAdmin/teacher/lectures", LectureRoutes);
 //userWeb --student
 app.use("/userWeb/SuccessStories", SuccessStoriesRoutes);
 app.use("/userWeb", UserAuthRoutes);
+app.use("/userWeb/wishList", WishList);
+app.use("/userWeb/course", UserCourse);
 
 
 

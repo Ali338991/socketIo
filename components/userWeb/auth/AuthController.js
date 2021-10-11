@@ -152,7 +152,7 @@ if (!req.body?.email) {
     return
   } else {
     const { email, password } = req.body;
-    const user = await StudentList.findOne({email: email})
+    const user = await StudentList.findOne({email: email}).populate('enrolledCourse','courseName')
     if(! user){
       res.status(400).json({ status: "error", message: "Email not found", statusCode: 400 })
       return
@@ -175,6 +175,7 @@ if (!req.body?.email) {
       cloudinaryId: user?.cloudinaryId,
       image: user?.image,
       role: user?.role,
+      enrolledCourse:user?.enrolledCourse,
       token,
     };
 
