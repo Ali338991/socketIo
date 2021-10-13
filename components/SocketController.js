@@ -39,3 +39,18 @@ return {data:await data.boxState}
   }
  
 };
+
+module.exports.delsocketBox = async () => {
+  try {
+const id = "61656e7b24a37808ae6139af";
+const data = await SocketList.findByIdAndUpdate(id, {
+  $set:{boxState:[]}
+}, { new: true}
+)
+return {data:await data.boxState}    
+  } catch (error) {
+    return error
+    
+  }
+ 
+};

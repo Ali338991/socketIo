@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 var app = express();
 const server = http.createServer(app)
 const io = socketio(server)
-let {socketBox,getsocketBox} = require('./components/SocketController')
+let {socketBox,getsocketBox,delsocketBox} = require('./components/SocketController')
 
  var SocketRoute = require("./components/SocketRoutes");
 
@@ -35,12 +35,20 @@ io.on('connection', (socket) => {
   console.log('Ali user connected');
   socket.on('check',async ({index},callback) => {
     const {data}= await socketBox(index)       
-    socket.emit('resultArray', {data})
+    // socket.emit('resultArray', {data})
+    io.emit('check', {data});
   });
 
+  //for get data
   socket.on('firstData',async () => {
     const {data}= await getsocketBox()       
     socket.emit('firstResult', {data})
+  });
+
+  //for del
+  socket.on('delData',async () => {
+    const {data}= await delsocketBox()       
+    socket.emit('del', {data})
   });
 
   socket.on('disconnect', () => {
